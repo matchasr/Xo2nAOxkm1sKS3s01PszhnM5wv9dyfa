@@ -73,9 +73,6 @@ const buttons = document.getElementsByClassName("cf");
 const menu = document.getElementById("option");
 const muteButton = document.getElementById("mute");
 
-const announce = new Audio("audio/ウエスタンドアを開くと鳴る入店音.mp3");
-announce.volume = 0.05;
-
 let isSpeech = true;
 let frequency = 15;
 let isSmallDisplay = false;
