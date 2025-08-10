@@ -1,116 +1,373 @@
-let bar = document.getElementById("time-bar");
-let title = document.getElementById("title");
-const url0 = document.getElementById("url-0");
-const url1 = document.getElementById("url-1");
-const url2 = document.getElementById("url-2");
-const url3 = document.getElementById("url-3");
-const button0 = document.getElementById("focus-0");
-const button1 = document.getElementById("focus-1");
-const button2 = document.getElementById("focus-2");
-const button3 = document.getElementById("focus-3");
-const icon = document.getElementById("icon");
+const body = document.getElementById("body");
+const tabIcon = document.getElementById("icon");
+const alarm = new Audio("audio/alarm.m4a");
+alarm.volume = 1;
 
+let windouWidth = window.innerWidth;
 
-function Time() {
-  var realTime = new Date();
+const timerEl = {
+  title: document.getElementById("title"),
+  clock: document.getElementById("time"),
+  bar: document.getElementById("time-bar"),
+  alart: document.getElementById("alart"),
+  guide: document.querySelectorAll(".guide"),
 
-  var hour = realTime.getHours();
-  var minutes = realTime.getMinutes();
-  var seconds = realTime.getSeconds();
+  quickStartDiv: document.getElementById("shortcuts"),
+  quickStartButtons: document.getElementsByClassName("quick-start"),
+  pauseButton: document.getElementById("pause"),
+  resumeButton: document.getElementById("resume"),
+  resetButton: document.getElementById("reset"),
+  startButton: document.getElementById("start"),
 
-  var hourStr = String(hour).padStart(2, '0');
-  var minutesStr = String(minutes).padStart(2, '0');
-  var secondsStr = String(seconds).padStart(2, '0');
-
-  var clockText = hourStr + "<span class='colon' id='colon'>:</span>" + minutesStr;
-  var clockTitleText = hourStr + ":" + minutesStr;
-  time.innerHTML = clockText;
-  if (!isTimerActivated) title.innerHTML = clockTitleText + ":" + secondsStr;
-
-  bar.style.width = ((60 - seconds) * 2) + "px";
-
-
-  if (((minutes % frequency == 0) && (seconds < 3)) || (minutes == 0 && seconds < 3)) {
-
-    setTimeout(() => {
-      if (isSpeech && (seconds == 0) && (!isTimerActivated)) speechCurrentTime(hour, minutes);
-    }, 10);
-
-  }
-
-  if (((minutes % 5 == 0) && (seconds < 10)) || (minutes == 0 && seconds < 10)) {
-    if (!isTimerActivated) blinkTitle(clockTitleText, seconds);
-  }
-}
-setInterval(Time, 1000);
-
-
-window.onload = function () {
-  Time();
-
-  const defaultButton = document.getElementById(15);
-  defaultButton.style.color = "white";
+  autoStopCheckbox: document.getElementById("auto-stop"),
+  volumeBar: document.getElementById("volume-bar"),
+  volumeBarLabel: document.getElementById("volume-bar-label")
 }
 
 
-function focusOn(index) {
-  const url = [url0, url1, url2];
-  const button = [button0, button1, button2];
-
-  url.forEach(elements => elements.style.display = "none");
-  button.forEach(elements => elements.style.color = "rgba(255, 255, 255, 0.2)");
-
-  url[index].style.display = "block";
-  button[index].style.color = "white";
+const timerInputEl = {
+  field: document.getElementById("input-field"),
+  minutes: document.getElementById("minutes"),
+  seconds: document.getElementById("seconds")
 }
 
 
+let tst = {
+  isActivated: false,
+  isAutoStopEnabled: false,
+  isFocused: true,
+  isAllowEnterToStart: true,
 
+  startedTime: undefined, //ms
+  endTime: undefined, //ms
+  pausedTime: undefined, //ms
 
-
-//時報関連
-const buttons = document.getElementsByClassName("cf");
-const menu = document.getElementById("option");
-const muteButton = document.getElementById("mute");
-
-let isSpeech = true;
-let frequency = 15;
-let isSmallDisplay = false;
-let isPlayed = false;
-
-function changeFrequency(number) {
-  frequency = number
-
-  const selectedButton = document.getElementById(number);
-  for (let i = 0; i < buttons.length; i++) {
-    buttons[i].style.color = "rgba(255, 255, 255, 0.2)";
-  }
-  selectedButton.style.color = "white";
+  yellowTitleTime: 0, //s
+  beforeRemainingSeconds: 0
 }
 
-function mute() {
-  if (isSpeech) {
-    isSpeech = false;
-    muteButton.style.color = "rgba(255, 255, 255, 0.2)";
+
+const worker = new Worker("./webWorker.js");
+
+
+
+setInterval(setVolume, 30);
+setInterval(setAutoStopMode, 30);
+setInterval(() => { windouWidth = window.innerWidth }, 60);
+
+window.onload = () => {
+  hideGuide();
+}
+
+
+document.body.addEventListener(
+  "keydown",
+  (ev) => {
+    if ((getRemainingSeconds() < 1) && (tst.isActivated)) reset();
+    if ((tst.isAllowEnterToStart) && (tst.endTime == undefined) && (ev.code == "Enter")) startFromInput();
+
+    //一時停止/再開[Space]
+    if (ev.code == "Space") {
+      if (tst.isActivated) { pause(); }
+      else if ((!tst.isActivated) && (tst.endTime)) { resume(); }
+    };
+
+    //入力消去[Esc]
+    if ((!tst.isActivated) && (tst.endTime == undefined) && (ev.code == "Escape")) {
+      timerInputEl.minutes.value = null;
+      timerInputEl.seconds.value = null;
+    };
+  },
+  { once: false }
+);
+
+
+
+
+
+worker.onmessage = (ev) => {
+  const remainingSeconds = ev.data;
+
+  if (remainingSeconds > 0) {
+    updateClockDisplay(remainingSeconds);
+
+    tst.beforeRemainingSeconds = remainingSeconds;
+
+    return; //残り時間が1秒以上ならここで終了
+
   } else {
-    isSpeech = true;
-    muteButton.style.color = "white";
+    playAlarm();
   }
 }
 
-function blinkTitle(clockTitleText, seconds) {
-  if (seconds % 2 == 0) {
-    title.innerHTML = (clockTitleText + " ■■■■■■■");
-    icon.href = "2.ico";
+
+
+
+function updateClockDisplay(remainingSeconds) {
+  const minutesStr = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+  const secondsStr = String(remainingSeconds % 60).padStart(2, '0');
+  const realTimeSeconds = new Date().getSeconds();
+  const diff = Math.abs(tst.beforeRemainingSeconds - getRemainingSeconds());
+
+  const clockText = minutesStr + "<span class='colon' id='colon'>:</span>" + secondsStr;
+  const titleText = (minutesStr + ":" + secondsStr);
+  timerEl.title.textContent = titleText + " Left";
+
+  timerEl.clock.innerHTML = clockText;
+
+  if (diff > 3) {
+    console.log("[" + getRealTimeStr() + "] Restricted background activity: " + (diff - 1) + "s")
+  };
+
+  timerEl.bar.style.width = (((Math.floor(getRemainingSeconds())) / tst.maxSeconds) * 500) + "px";
+  if (windouWidth < 769) timerEl.bar.style.width = (((Math.floor(getRemainingSeconds())) / tst.maxSeconds) * 300) + "px";
+
+  const colon = document.getElementById("colon");
+
+  if (realTimeSeconds % 2 == 0) {
+    colon.style.color = "#ffffffff";
   } else {
-    title.innerHTML = (clockTitleText + " □□□□□□□");
-    icon.href = "1.ico";
+    colon.style.color = "#ffffff98";
+  }
+
+}
+
+
+function playAlarm() {
+  const realTimeSeconds = new Date().getSeconds();
+
+  timerEl.clock.textContent = "00:00";
+  timerEl.bar.style.width = "0px";
+
+  if (realTimeSeconds % 2 == 0) {
+    body.style.backgroundColor = "white";
+    timerEl.clock.style.filter = "invert(100%)";
+    timerEl.pauseButton.style.filter = "invert(100%)";
+    timerEl.title.textContent = "■■■■■■■■■■■■■■■";
+    tabIcon.href = "mg_icon_aqua.ico";
+
+    alarm.play();
+    if (tst.isAutoStopEnabled) reset();
+
+  } else {
+    body.style.backgroundColor = "#505050";
+    timerEl.clock.style.filter = "invert(0%)";
+    timerEl.pauseButton.style.filter = "invert(0%)";
+    timerEl.title.textContent = "□□□□□□□□□□□□□□□";
+    tabIcon.href = "mg_icon.ico";
   }
 }
 
-function speechCurrentTime(hour, minutes) {
-  let msg = new SpeechSynthesisUtterance(hour + "時" + minutes + "分です");
-  if (minutes == 0) msg = new SpeechSynthesisUtterance(hour + "時です");
-  msg.volume = 0.4;
-  window.speechSynthesis.speak(msg);
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * タイマーを開始する
+ * @param {number} timeLeft 
+ */
+function start(timeLeft) {
+  tst.startedTime = Date.now();
+  tst.endTime = Date.now() + (timeLeft * 1000) + 50; //動作が遅れることを想定して終了時刻を0.05秒遅く設定
+  worker.postMessage([tst.endTime, true, false]);
+
+  tst.maxSeconds = timeLeft;
+  tst.beforeRemainingSeconds = timeLeft;
+  tst.isActivated = true;
+  tst.isAllowEnterToStart = false;
+
+  const minutesStr = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+  const secondsStr = String(timeLeft % 60).padStart(2, '0');
+
+  timerEl.clock.textContent = minutesStr + ":" + secondsStr;
+  timerEl.title.textContent = minutesStr + ":" + secondsStr + " Left";
+  timerEl.bar.style.width = (windouWidth < 769) ? (300 + "px") : (500 + "px");
+  timerEl.clock.style.display = "flex";
+  timerInputEl.field.style.display = "none";
+
+  for (let i = 0; i < timerEl.quickStartButtons.length; i++) {
+    timerEl.quickStartButtons[i].style.color = "transparent";
+    timerEl.quickStartButtons[i].style.filter = "blur(10px)";
+  }
+  setTimeout(() => {
+    timerEl.quickStartDiv.style.display = "none";
+  }, 300);
+
+  timerEl.startButton.style.display = "none";
+  timerEl.pauseButton.style.display = "inline-block";
+
+  console.log("[" + getRealTimeStr() + "] started\nlength: " + (getRemainingSeconds()));
+}
+
+
+
+//指定入力された時間でタイマーを開始する
+function startFromInput() {
+  const newTime = ((Number(timerInputEl.minutes.value) * 60) + Number(timerInputEl.seconds.value));
+  if (newTime == 0) {
+    return;
+  }
+
+  start(newTime)
+}
+
+
+
+//一時停止
+function pause() {
+  tst.isActivated = false;
+  worker.postMessage([tst.endTime, false]);
+
+  if (Math.floor((tst.endTime - Date.now()) / 1000) < 1) { //タイマーが鳴っていれば終了する
+    reset();
+    return;
+  }
+
+  tst.pausedTime = Date.now();
+
+  tabIcon.href = "mg_icon_gray.ico";
+
+  timerEl.resumeButton.style.display = "inline-block";
+  timerEl.resetButton.style.display = "inline-block";
+  timerEl.pauseButton.style.display = "none";
+
+  const minutesStr = String(Math.floor(getRemainingSeconds() / 60)).padStart(2, '0');
+  const secondsStr = String(getRemainingSeconds() % 60).padStart(2, '0');
+  timerEl.title.textContent = minutesStr + ":" + secondsStr + " ■PAUSED■";
+
+}
+
+
+
+//再開
+function resume() {
+  tst.isActivated = true;
+  const now = Date.now();
+  tst.endTime += ((now - tst.pausedTime));
+  worker.postMessage([tst.endTime, true]);
+
+  setTimeout(() => {
+    updateClockDisplay(getRemainingSeconds());
+  }, getRemainingSeconds(true)%1000 +10);
+
+  const remainingSeconds = getRemainingSeconds();
+  const minutesStr = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+  const secondsStr = String(remainingSeconds % 60).padStart(2, '0');
+
+  tabIcon.href = "mg_icon.ico";
+  timerEl.resumeButton.style.display = "none";
+  timerEl.resetButton.style.display = "none";
+  timerEl.pauseButton.style.display = "inline-block";
+  timerEl.title.textContent = (minutesStr + ":" + secondsStr);
+
+}
+
+
+
+//タイマーを終了
+function reset() {
+  tst.isActivated = false;
+  worker.postMessage([undefined, false, true]);
+
+  timerEl.title.textContent = "Timer";
+  timerEl.clock.textContent = "00:00";
+  timerEl.bar.style.width = "0px";
+
+  body.style.backgroundColor = "#505050";
+  timerEl.clock.style.filter = "invert(0%)";
+  timerEl.quickStartDiv.style.display = "flex";
+  tabIcon.href = "mg_icon.ico";
+
+  for (let i = 0; i < timerEl.quickStartButtons.length; i++) {
+    timerEl.quickStartButtons[i].style.color = "white";
+    timerEl.quickStartButtons[i].style.filter = "blur(0px)";
+  }
+  timerEl.clock.style.display = "none";
+  timerInputEl.field.style.display = "flex";
+
+  setTimeout(() => {
+    timerEl.pauseButton.removeAttribute("style");
+    timerEl.resumeButton.removeAttribute("style");
+    timerEl.resetButton.removeAttribute("style");
+
+    timerEl.startButton.style.display = "inline-block";
+  }, 1);
+
+  tst.endTime = undefined;
+  tst.startedTime = undefined;
+
+  setTimeout(() => {
+    tst.isAllowEnterToStart = true;
+  }, 100);
+
+}
+
+
+//自動でタイマーを止める　を切り替える
+function setAutoStopMode() {
+  if (timerEl.autoStopCheckbox.checked) {
+    tst.isAutoStopEnabled = true;
+  } else {
+    tst.isAutoStopEnabled = false;
+  }
+}
+
+
+
+//音量を変更する
+function setVolume() {
+  const volume = timerEl.volumeBar.value;
+  timerEl.volumeBarLabel.textContent = ("Volume: " + volume + "%");
+  alarm.volume = volume * 0.01;
+}
+
+
+
+//ガイドを非表示
+function hideGuide() {
+  setTimeout(() => {
+    timerEl.guide.forEach(el => {
+      el.style.color = "transparent";
+
+      setTimeout(() => {
+        el.style.display = "none";
+      }, 1500);
+
+    });
+  }, 10000);
+}
+
+
+/**
+ * 
+ * @returns {number}
+ */
+function getRemainingSeconds(includeMilliseconds) {
+  if(includeMilliseconds) {
+    return Math.floor((tst.endTime - (Date.now())) / 1000)+(((tst.endTime - (Date.now())) % 1000) *0.0001);
+  } else {
+  return Math.floor((tst.endTime - (Date.now())) / 1000);
+  }
+}
+
+
+/**
+ * 
+ * @returns {text}
+ */
+function getRealTimeStr(includeMilliseconds) {
+  const realTime = new Date();
+  const hoursStr = String(Math.floor(realTime.getHours())).padStart(2, '0');
+  const minutesStr = String(Math.floor(realTime.getMinutes())).padStart(2, '0');
+  const secondsStr = String(realTime.getSeconds()).padStart(2, '0');
+  if (includeMilliseconds) {return (hoursStr + ":" + minutesStr + ":" + secondsStr+"."+realTime.getMilliseconds());}
+  else {return (hoursStr + ":" + minutesStr + ":" + secondsStr);}
 }
