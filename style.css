@@ -1,149 +1,293 @@
 body {
-  background-color: rgb(170, 170, 170);
+  background-color: #505050;
   color: #ffffff;
   margin-left: 30px;
+  margin-top: 30px;
+  transition: all 1s ease-out;
+  
 
-  font-family: 'Zen Maru Gothic';
-}
-hr {
-  margin-top: 20px;
-  margin-left: 10px;
-  border: none;
-  height: 1px;
-  width: 25px;
-  background-color: #ffffff;
-}
-li {
-  list-style: decimal-leading-zero;
-  padding-left: 10px;
+  font-family: "Raleway", "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", sans-serif;
+  font-weight: 100;
+  font-style: normal;
 
-  font-family: 'Zen Maru Gothic';
-  letter-spacing: 0.1rem;
-  font-size: 12px;
-}
-a {
-  text-decoration: none;
-  color: #ffffff;
-  font-size: 24px;
-  letter-spacing: 0.05rem;
-  font-family: 'Zen Maru Gothic';
-  transition: all 0.25s ease-out;
-}
-.emoji {
-  filter: saturate(0%) brightness(1000%) contrast(1000%) opacity(100%);
-}
-li a:hover {
-  padding-left: 5px;
-}
-.name {
   font-size: 18px;
-  color: #ffffffa3;
+  letter-spacing: 0.05em;
 }
 
-.frame {
-  filter:contrast(0%) saturate(0%);
-  transition: all 0.3s ease-out;
-}
-.frame:hover {
-  filter:contrast(80%) saturate(0%);
+
+.align-right {
+  text-align: right;
 }
 
-.list {
-  margin-top: 100px;
+
+.guide {
+  filter: opacity(70%);
+  font-size: 16px;
+
+  transition: all 1.5s ease-out;
 }
+
+
+#alart {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-160px);
+}
+
 
 button {
   background-color: transparent;
-  border-color: transparent;
-  border-width: 1px;
-  margin-left: 3px;
-
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 26px;
-  letter-spacing: 0.05rem;
-  font-family: 'Zen Maru Gothic';
-
-  transition: all 0.25s ease-out;
-}
-.menu {
-  position: absolute;
-  display: flex;
-  padding-right: 100px;
-  top: 40px;
-  filter: saturate(0%) brightness(100000%) contrast(100%) opacity(10%);
-  transition: all 0.25s ease-out;
-}
-.menu:hover {
-  filter: saturate(0%) brightness(100000%) contrast(100%) opacity(100%);
-}
-.focus-0 {
   color: white;
+  font-size: 26px;
+  letter-spacing: 0.01rem;
+  font-family: "Raleway";
+
+  border-width: 0px;
+  border-spacing: 5px;
+  border-color: transparent;
+
+  padding-block: 1px;
+  padding-inline: 6px;
+
+  transition: all 0.3s ease-out;
+}
+
+#shortcuts button, #timer-menu button {
+  border-width: 1px;
+  border-spacing: 5px;
+  border-color: transparent;
+  border-style:dotted;
+  font-weight: lighter;
+
+  transition: all 0.3s ease-out;
+}
+#shortcuts button:hover, #timer-menu button:hover {
+  border-bottom-color: white;
 }
 
 
-.url-1 {
-  display: none;
-}
-.url-2 {
-  display: none;
-}
-.url-3 {
-  display: none;
-}
-
-
-
-
-.option {
+#shortcuts {
+  transition: all 0.3s ease-out;
   display: flex;
-  margin-left: 5px;
-  position: absolute;
-  right: 60px;
-  top: 40px;
+}
 
-  filter: opacity(0%);
+
+
+
+#auto-stop {
+  height: 24px;
+  width: 24px;
+  filter: saturate(0%) contrast(70%);
+
+  transition: all 0.3s ease-out;
+}
+#auto-stop-label {
+  height: 14px;
+}
+
+
+#option {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+}
+#volume-bar {
+  height: 30px;
+  margin-top: 0px;
+  width: 170px;
+  color: white;
+
+  filter: saturate(0%) contrast(70%);
+}
+#volume-bar-label {
+  float:right;
+}
+
+
+label {
+  color: #ffffffa3;
+}
+
+
+
+
+#timer-menu {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 110px);
+  transform: translate(-50%, 0);
+
+  transition: transform 1s ease-out;
+}
+
+#pause {
+  display: none;
+  font-size: 30px;
+  transition: filter 1s ease-out, all 0.3s ease-out;
+}
+
+#resume {
+  display: none;
+  font-size: 30px;
+}
+
+#reset {
+  display: none;
+  font-size: 30px;
+  color: white;
+  margin-right: 30px;
+  transition: all 0.3s ease-out;
+}
+#reset:hover {
+  color:rgb(255, 157, 157);
+  border-bottom-color:rgb(255, 157, 157);
+}
+
+
+#start {
+  display: inline-block;
+  font-size: 30px;
+  transition: all 0.3s ease-out;
+}
+
+
+#input-field {
+  display: flex;
+  justify-content: center;
+  font-size: 150px;
+  letter-spacing: 0.05rem;
+
+  position: absolute;
+  height: 180px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#input-field input {
+  background-color: transparent;
+  color: white;
+  font-size: 150px;
+  font-family: 'Raleway';
+
+  margin: 0px;
+  padding: 0px;
+
+  width: 280px;
+  height: 180px;
+  max-width: 100%;
+
+  margin-top: auto;
+
+  border: none;
+  transition: all 1s ease-out;
+}
+input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
+  display: none;
+}
+input:focus {
+  outline: none;
+  text-decoration: none;
+  caret-color: rgba(255, 255, 255, 0.8);
+}
+.input-colon {
+  font-size: 150px;
+  font-family: 'Raleway';
+  user-select: none;
+  margin-top: auto;
+  transition: all 1s ease-out;
+}
+#input-field-guide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-100px);
+
+  font-size: 16px;
+}
+
+
+#time {
+  display: none;
+  text-align: center;
+  font-size: 150px;
+  letter-spacing: 0.05rem;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -135%);
+  font-family: 'Raleway';
+  transition: all 1s ease-out;
+  filter: invert(0%);
+}
+
+
+#time-bar {
+  width: 0px;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.4);
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 90px);
+  transform: translate(-50%, 0);
+  transition: all 1s ease-out;
+}
+
+
+.colon {
+  transition: all 0.8s ease-out;
+}
+
+
+#version {
+  position: absolute;
+  right: 15px;
+  bottom: 0px;
+
+  filter: opacity(25%);
+}
+
+
+
+#menu {
+  display: flex;
+  position: absolute;
+  top: -40px;
+  padding-inline: 50px;
+  padding-bottom: 25px;
+  margin-inline: -50px;
+  opacity: 0%;
+
   transition: all 0.2s ease-out;
 }
-.option:hover {
-  filter: opacity(100%);
+#menu:hover {
+  top: 0px;
+  opacity: 100%;
 }
-.cf {
-  font-size: 22px;
+#menu:hover #shortcuts {
+  display: none;
 }
-.mute {
+
+
+#focus-0 {
   color: white;
 }
 
+#url-1 {
+  display: none;
+  margin-top: 45px;
+}
+#url-2 {
+  display: none;
+  margin-top: 45px;
+}
+#url-3 {
+  display: none;
+}
 
-
-
-.time {
-  text-align: center;
-  font-size: 40px;
-  margin-bottom: 0px;
+.listDiv {
   margin-top: 30px;
-  font-family: 'Raleway';
-}
-
-.time-bar {
-  width: 0px; /* 初期状態は0 */
-  height: 1px; /* バーの高さ */
-  background-color: rgba(255, 255, 255, 0.5); /* 見やすくするための色 */
-  position: absolute;
-  left: 50.75%;
-  transform: translateX(-50%);
-  transition: width 1s ease-out; /* 滑らかに変化 */
-}
-
-
-.switch a {
-  font-size:40px;
-  position: absolute;
-  top: 30px;
-  left: 50.75%;
-  transform: translateX(-50%);
-  color: #ffffff00;
-  transition: all 0.25s ease-out;
 }
 
 
@@ -151,27 +295,48 @@ button {
   color: white;
   background-color: gray;
   text-align: center;
-  width: 966px;
-  height: 543px;
+  position:absolute;
+
   transition: all 0.25s ease-out;
 }
 .lp:hover {
   background-color: transparent;
 }
 
-
-
-
-
-@font-face {
-  font-family: 'Zen Maru Gothic';
-  src: url('./fonts/ZenMaruGothic-Light.ttf') format('truetype');
-  font-weight: 200;
-  font-style: normal;
+.frame {
+  margin-top: 15px;
+  filter:contrast(0%) saturate(0%);
+  transition: all 0.3s ease-out;
 }
-@font-face {
-  font-family: 'Raleway';
-  src: url('./fonts/Raleway-Thin.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
+.frame:hover {
+  filter:contrast(80%) saturate(0%);
+}
+
+
+
+@media screen and (max-width: 768px) {
+  #shortcuts {
+    display: flex-block;
+    flex-wrap: wrap;
+  }
+
+  #time, #input-field input {
+    font-size: 100px;
+  }
+  #input-field input {
+    width: 120px;
+    overflow: hidden;
+  }
+  #input-field .input-colon{
+    font-size: 100px;
+    transform: translateY(31px);
+  }
+
+  #timer-menu {
+    transform: translate(-50%, -36px);
+  }
+
+  #time-bar {
+    transform: translate(-50%, -30px);
+  }
 }
