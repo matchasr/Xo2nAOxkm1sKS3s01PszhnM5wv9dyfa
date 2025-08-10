@@ -1,99 +1,103 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="title">Bookmarks</title>
-  <style type="text/css">
-    @import url("./timer.css");
-    @import url("./style.css");
-  </style>
 
-  <link rel="icon" href="1.ico" type="image/x-icon" id="icon">
+  <title id="title">Timer</title>
+  <link rel="stylesheet" href="style.css">
 
+  <link rel="icon" href="mg_icon.ico" type="image/x-icon" id="icon">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
 </head>
 
-<body>
-
-  <div class="clock" id="clock">
-    <p id="time" class="time"></p>
-    <div id="time-bar" class="time-bar"></div>
-
-    <div id="switch" class="switch">
-      <a href="file:///Users/aiueon/Desktop/HUB/Pages/Minimal_Start/index.html" rel="noopener noreferrer">______</a>
-    </div>
-  </div>
-
-
-  <br>
-
+<body id="body">
   <div class="menu" id="menu">
     <button type=“button” onclick="focusOn(0);" class="focus-0" id="focus-0">⌛️</button>
     <button type=“button” onclick="focusOn(1);" class="focus-1" id="focus-1">🫧</button>
     <button type=“button” onclick="focusOn(2);" class="focus-2" id="focus-2">🌧️</button>
   </div>
 
-  <div class="url" id="url-0">
-    <!--時間-->
-    <p id="timer-clock" class="timer-clock">00:00</p>
-    <div id="timer-bar" class="timer-bar"></div>
-    <div class="space"></div>
+  <!--バージョン-->
+  <p id="version" class="guide">Last Update: 2025/08/10</p>
+
+ <div class="url" id="url-0">
+  <!--警告-->
+  <p id="alart"></p>
 
 
-    <!--ショートカット-->
-    <div class="timer-shortcuts" id="shortcuts">
-      <button type=“button” onclick="start(180)" class="timer-quick-start" class="timer-button">3:00</button>
-      <button type=“button” onclick="start(300)" class="timer-quick-start" class="timer-button">5:00</button>
-      <button type=“button” onclick="start(420)" class="timer-quick-start" class="timer-button">7:00</button>
-      <button type=“button” onclick="start(600)" class="timer-quick-start" class="timer-button">10:00</button>
-      <button type=“button” onclick="start(720)" class="timer-quick-start" class="timer-button">12:00</button>
-      <button type=“button” onclick="start(900)" class="timer-quick-start" class="timer-button">15:00</button>
-      <button type=“button” onclick="start(1200)" class="timer-quick-start" class="timer-button">20:00</button>
-      <button type=“button” onclick="start(1500)" class="timer-quick-start" class="timer-button">25:00</button>
-      <button type=“button” onclick="start(1800)" class="timer-quick-start" class="timer-button">30:00</button>
-    </div>
-
-    <!--オプション-->
-    <div class="timer-volume-bar-div">
-      <input type="range" id="volume-bar" name="volume-bar" min="0" max="100" value="10" step="1" list="markers" />
-      <label for="volume-bar" id="volume-bar-label">Volume</label>
-
-      <datalist id="markers">
-        <option value="10"></option>
-      </datalist>
-    </div>
+  <!--時間-->
+  <p id="time">00:00</p>
+  <div id="time-bar"></div>
 
 
-    <!--タイマー稼働時に表示されるUI-->
-    <div class="timer-menu">
-      <button type=“button” onclick="pause()" class="timer-button" class="pause" id="pause">❙ ❙</button>
-      <button type=“button” onclick="reset()" class="timer-button" class="reset" id="reset">✖︎</button><!--
-  --><button type=“button” onclick="resume()" class="timer-button" class="resume" id="resume">▶︎</button>
-    </div>
-
+  <!--ショートカット-->
+  <div id="shortcuts">
+    <button type=“button” onclick="start(180)" class="quick-start">3:00</button>
+    <button type=“button” onclick="start(300)" class="quick-start">5:00</button>
+    <button type=“button” onclick="start(420)" class="quick-start">7:00</button>
+    <button type=“button” onclick="start(600)" class="quick-start">10:00</button>
+    <button type=“button” onclick="start(720)" class="quick-start">12:00</button>
+    <button type=“button” onclick="start(900)" class="quick-start">15:00</button>
   </div>
 
 
+  <!--指定入力欄-->
+  <div id="input-field">
+    <p id="input-field-guide" class="guide">Enter the time you want here:</p>
+    <input class="align-right" type="number" id="minutes" name="minutes" placeholder="00" />
+    <p class="input-colon">:</p>
+    <input type="number" id="seconds" name="seconds" placeholder="00" maxlength="2" />
+  </div>
 
-  <div class="url-1" id="url-1">
+
+  <!--オプション-->
+  <div id="option">
+    <input type="checkbox" id="auto-stop" name="auto-stop">
+    <label for="auto-stop" id="auto-stop-label">Auto-stop timer</label>
+
+    <br>
+
+    <input type="range" id="volume-bar" class="volume-bar" name="volume-bar" min="0" max="100" value="15" step="1"
+      list="markers" />
+    <label for="volume-bar" id="volume-bar-label">Volume: 15%</label>
+
+    <datalist id="markers">
+      <option value="15"></option>
+    </datalist>
+  </div>
+
+
+  <!--タイマー稼働時に表示されるUI-->
+  <div id="timer-menu">
+    <button type=“button” onclick="pause()" id="pause">❙ ❙</button>
+    <button type=“button” onclick="reset()" id="reset">✖︎</button><!--
+  --><button type=“button” onclick="resume()" id="resume">▶︎</button><!--
+  --><button type=“button” onclick="startFromInput()" id="start">▶︎</button>
+  </div>
+</div>
+
+
+
+
+
+
+  <div class="listDiv" id="url-1">
     <button type="button" onclick="loadPlaylistASMR()" class="lp" id="loadPlaylistASMR">Load</button>
   </div>
 
-  <div class="url-2" id="url-2">
+  <div class="listDiv" id="url-2">
     <button type="button" onclick="loadPlaylistAmbience()" class="lp" id="loadPlaylistAmbience">Load</button>
   </div>
 
-  <div class="option" id="option">
-    <button type=“button” onclick="mute();" class="mute" id="mute">♫</button>
-    <button type=“button” onclick="changeFrequency(15);" class="cf" id="15">15Mins</button>
-    <button type=“button” onclick="changeFrequency(20);" class="cf" id="20">20Mins</button>
-    <button type=“button” onclick="changeFrequency(30);" class="cf" id="30">30Mins</button>
-  </div>
-  </div>
 
   <script src="main.js"></script>
-  <script src="timer.js"></script>
+  <script src="switchScreen.js"></script>
   <script src="loadLists.js"></script>
 </body>
 
