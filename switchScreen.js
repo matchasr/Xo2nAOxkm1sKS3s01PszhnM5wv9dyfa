@@ -9,12 +9,13 @@ const button3 = document.getElementById("focus-3");
 
 
 function focusOn(index) {
-  const url = [url0, url1, url2];
-  const button = [button0, button1, button2];
+  const url = [url0, url1, url2, url3];
+  const button = [button0, button1, button2, button3];
 
   url.forEach(elements => elements.style.display = "none");
-  button.forEach(elements => elements.style.color = "rgba(255, 255, 255, 0.2)");
+  button.forEach(elements => elements.style.opacity = "20%");
 
   url[index].style.display = "block";
-  button[index].style.color = "white";
+  button[index].style.opacity = "100%";
 }
+
