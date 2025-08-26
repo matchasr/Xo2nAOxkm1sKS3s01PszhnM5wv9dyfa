@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title id="title">Timer</title>
+  <title id="title">Bookmarks</title>
   <link rel="stylesheet" href="style.css">
 
   <link rel="icon" href="mg_icon.ico" type="image/x-icon" id="icon">
@@ -18,13 +18,11 @@
 
 <body id="body">
   <div class="menu" id="menu">
-    <button type=“button” onclick="focusOn(0);" class="focus-0" id="focus-0">⌛️</button>
-    <button type=“button” onclick="focusOn(1);" class="focus-1" id="focus-1">🫧</button>
-    <button type=“button” onclick="focusOn(2);" class="focus-2" id="focus-2">🌧️</button>
+    <button type=“button” onclick="focusOn(0);" class="focusa" id="focus-0"> <img src="assets/icons/timer_transparent.png" class="menu-icon"> </button>
+    <button type=“button” onclick="focusOn(1);" class="focusb" id="focus-1"> <img src="assets/icons/asmr_transparent.png" class="menu-icon"> </button>
+    <button type=“button” onclick="focusOn(2);" class="focusb" id="focus-2"> <img src="assets/icons/ambience_transparent.png" class="menu-icon"> </button>
+    <button type=“button” onclick="focusOn(3);" class="focusb" id="focus-3"> <img src="assets/icons/dream_transparent.png" class="menu-icon"> </button>
   </div>
-
-  <!--バージョン-->
-  <p id="version" class="guide">Last Update: 2025/08/11</p>
 
  <div class="url" id="url-0">
   <!--警告-->
@@ -65,10 +63,10 @@
 
     <input type="range" id="volume-bar" class="volume-bar" name="volume-bar" min="0" max="100" value="15" step="1"
       list="markers" />
-    <label for="volume-bar" id="volume-bar-label">Volume: 15%</label>
+    <label for="volume-bar" id="volume-bar-label">Volume: 10%</label>
 
     <datalist id="markers">
-      <option value="15"></option>
+      <option value="10"></option>
     </datalist>
   </div>
 
@@ -95,10 +93,14 @@
     <button type="button" onclick="loadPlaylistAmbience()" class="lp" id="loadPlaylistAmbience">Load</button>
   </div>
 
+  <div class="listDiv" id="url-3">
+    <button type="button" onclick="loadPlaylistDream()" class="lp" id="loadPlaylistDream">Load</button>
+  </div>
 
   <script src="main.js"></script>
   <script src="switchScreen.js"></script>
   <script src="loadLists.js"></script>
+
 </body>
 
 </html>
