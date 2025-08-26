@@ -258,22 +258,33 @@ input:focus {
   padding-bottom: 25px;
   margin-inline: -50px;
   opacity: 0%;
+  filter: blur(10px);
+
+  border: none;
 
   transition: all 0.2s ease-out;
 }
 #menu:hover {
-  top: 0px;
+  top: 5px;
   opacity: 100%;
+  filter: blur(0px);
 }
-#menu:hover #shortcuts {
+#menu:hover + #shortcuts {
   display: none;
 }
-
+#menu button {
+  transition: opacity 0.15s ease-out;
+}
+.menu-icon {
+  height: 26px;
+  width: 26px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
 
 #focus-0 {
   color: white;
 }
-
 #url-1 {
   display: none;
   margin-top: 45px;
@@ -284,6 +295,11 @@ input:focus {
 }
 #url-3 {
   display: none;
+  margin-top: 45px;
+}
+.focusb {
+  margin-left: 7px;
+  opacity: 20%;
 }
 
 .listDiv {
@@ -307,11 +323,36 @@ input:focus {
   margin-top: 15px;
   width: 483;
   height: 271.5;
+
   filter:contrast(0%) saturate(0%);
+  position: relative;
+  z-index: 100;
   transition: all 0.3s ease-out;
 }
 .frame:hover {
   filter:contrast(80%) saturate(0%);
+}
+
+.frame-icon {
+  position: absolute;
+  top: 182.75px;
+  left: 270.5px;
+  transform: translate(-50%, 0);
+  z-index: 101;
+  pointer-events: none;
+  
+
+  height: 26px;
+  width: 26px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  opacity: 30%;
+
+  user-select: none;
+  transition: opacity 0.3s ease-out;
+}
+.listDiv:hover .frame-icon {
+  opacity: 0%;
 }
 
 
