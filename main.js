@@ -1,373 +1,250 @@
+/*
+todo
+
+・Iosモード実装　→　#menu常駐, .frame常時表示
+*/
 const body = document.getElementById("body");
 const tabIcon = document.getElementById("icon");
-const alarm = new Audio("audio/alarm.m4a");
-alarm.volume = 1;
 
 let windouWidth = window.innerWidth;
 
-const timerEl = {
+const clockEl = {
   title: document.getElementById("title"),
   clock: document.getElementById("time"),
   bar: document.getElementById("time-bar"),
-  alart: document.getElementById("alart"),
-  guide: document.querySelectorAll(".guide"),
 
-  quickStartDiv: document.getElementById("shortcuts"),
-  quickStartButtons: document.getElementsByClassName("quick-start"),
-  pauseButton: document.getElementById("pause"),
-  resumeButton: document.getElementById("resume"),
-  resetButton: document.getElementById("reset"),
-  startButton: document.getElementById("start"),
-
-  autoStopCheckbox: document.getElementById("auto-stop"),
+  buttons: document.getElementsByClassName("cf"),
+  menu: document.getElementById("clock-menu"),
+  optionIcon: document.getElementById("option-icon"),
+  muteCheckbox: document.getElementById("mute"),
+  muteIcon: document.getElementById("mute-icon"),
   volumeBar: document.getElementById("volume-bar"),
-  volumeBarLabel: document.getElementById("volume-bar-label")
+  volumeBarLabel: document.getElementById("volume-bar-label"),
+
+  colorableFont: document.querySelectorAll(".colorable-font")
 }
 
-
-const timerInputEl = {
-  field: document.getElementById("input-field"),
-  minutes: document.getElementById("minutes"),
-  seconds: document.getElementById("seconds")
+let clock = {
+  volume: 0,
+  isMenuShown: false,
+  frequency: 15,
 }
 
+let time = {
+  hour: 0,
+  minutes: 0,
+  seconds: 0,
 
-let tst = {
-  isActivated: false,
-  isAutoStopEnabled: false,
-  isFocused: true,
-  isAllowEnterToStart: true,
-
-  startedTime: undefined, //ms
-  endTime: undefined, //ms
-  pausedTime: undefined, //ms
-
-  yellowTitleTime: 0, //s
-  beforeRemainingSeconds: 0
-}
-
-
-const worker = new Worker("./webWorker.js");
-
-
-
-setInterval(setVolume, 30);
-setInterval(setAutoStopMode, 30);
-setInterval(() => { windouWidth = window.innerWidth }, 60);
-
-window.onload = () => {
-  hideGuide();
+  hourStr: 0,
+  minutesStr: 0,
+  secondsStr: 0
 }
 
 
 document.body.addEventListener(
   "keydown",
   (ev) => {
-    if ((getRemainingSeconds() < 1) && (tst.isActivated)) reset();
-    if ((tst.isAllowEnterToStart) && (tst.endTime == undefined) && (ev.code == "Enter")) startFromInput();
+    //ミュート[M]
+    if (ev.code == "KeyM") {
+      if (clockEl.muteCheckbox.checked) {
+        clockEl.muteCheckbox.checked = false;
+      } else {
+        clockEl.muteCheckbox.checked = true;
+      }
+      return;
+    }
 
-    //一時停止/再開[Space]
-    if (ev.code == "Space") {
-      if (tst.isActivated) { pause(); }
-      else if ((!tst.isActivated) && (tst.endTime)) { resume(); }
-    };
-
-    //入力消去[Esc]
-    if ((!tst.isActivated) && (tst.endTime == undefined) && (ev.code == "Escape")) {
-      timerInputEl.minutes.value = null;
-      timerInputEl.seconds.value = null;
-    };
+    if (ev.code == "KeyO") {
+      showMenu();
+      return;
+    }
   },
   { once: false }
 );
 
 
+window.onload = function () {
+  Time();
+  const defaultButton = document.getElementById(clock.frequency);
+  defaultButton.style.opacity = "100%";
 
-
-
-worker.onmessage = (ev) => {
-  const remainingSeconds = ev.data;
-
-  if (remainingSeconds > 0) {
-    updateClockDisplay(remainingSeconds);
-
-    tst.beforeRemainingSeconds = remainingSeconds;
-
-    return; //残り時間が1秒以上ならここで終了
-
-  } else {
-    playAlarm();
-  }
+  const waitms = (1030- (new Date().getMilliseconds));
+  setTimeout(() => {
+   setInterval(Time, 1000);
+  }, waitms);
 }
+setInterval(setVolume, 30);
+setInterval(setMute, 30);
 
 
 
+function Time() {
+  updateTime();
 
-function updateClockDisplay(remainingSeconds) {
-  const minutesStr = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
-  const secondsStr = String(remainingSeconds % 60).padStart(2, '0');
-  const realTimeSeconds = new Date().getSeconds();
-  const diff = Math.abs(tst.beforeRemainingSeconds - getRemainingSeconds());
 
-  const clockText = minutesStr + "<span class='colon' id='colon'>:</span>" + secondsStr;
-  const titleText = (minutesStr + ":" + secondsStr);
-  timerEl.title.textContent = titleText + " Left";
+  const clockText = time.hourStr + "<span class='colon' id='colon'>:</span>" + time.minutesStr;
+  const clockTitleText = time.hourStr + ":" + time.minutesStr;
+  clockEl.clock.innerHTML = clockText;
+  title.innerHTML = clockTitleText + ":" + time.secondsStr;
 
-  timerEl.clock.innerHTML = clockText;
 
-  if (diff > 3) {
-    console.log("[" + getRealTimeStr() + "] Restricted background activity: " + (diff - 1) + "s")
-  };
 
-  timerEl.bar.style.width = (((Math.floor(getRemainingSeconds())) / tst.maxSeconds) * 500) + "px";
-  if (windouWidth < 769) timerEl.bar.style.width = (((Math.floor(getRemainingSeconds())) / tst.maxSeconds) * 300) + "px";
+  clockEl.bar.style.width = ((60 - time.seconds) * 7) + "px";
 
   const colon = document.getElementById("colon");
-
-  if (realTimeSeconds % 2 == 0) {
-    colon.style.color = "#ffffffff";
+  if (time.seconds % 2 == 0) {
+    colon.style.opacity = "100%";
   } else {
-    colon.style.color = "#ffffff98";
+    colon.style.opacity = "70%";
   }
 
+  if (((time.minutes % clock.frequency == 0) || time.minutes == 0) && time.seconds < 5) {
+    speechCurrentTime();
+    blinkTitle(clockTitleText, time.seconds);
+    if(url0.style.display !== "none") highlight();
+    return;
+  }
+
+  unhighlight();
 }
 
 
-function playAlarm() {
-  const realTimeSeconds = new Date().getSeconds();
 
-  timerEl.clock.textContent = "00:00";
-  timerEl.bar.style.width = "0px";
 
-  if (realTimeSeconds % 2 == 0) {
-    body.style.backgroundColor = "white";
-    timerEl.clock.style.filter = "invert(100%)";
-    timerEl.pauseButton.style.filter = "invert(100%)";
-    timerEl.title.textContent = "■■■■■■■■■■■■■■■";
+
+
+function blinkTitle(clockTitleText, seconds) {
+  if (seconds % 2 == 1) {
+    title.innerHTML = (clockTitleText + " ■■■■■■■");
     tabIcon.href = "mg_icon_aqua.ico";
-
-    alarm.play();
-    if (tst.isAutoStopEnabled) reset();
-
   } else {
-    body.style.backgroundColor = "#505050";
-    timerEl.clock.style.filter = "invert(0%)";
-    timerEl.pauseButton.style.filter = "invert(0%)";
-    timerEl.title.textContent = "□□□□□□□□□□□□□□□";
+    title.innerHTML = (clockTitleText + " □□□□□□□");
     tabIcon.href = "mg_icon.ico";
   }
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-/**
- * タイマーを開始する
- * @param {number} timeLeft 
- */
-function start(timeLeft) {
-  tst.startedTime = Date.now();
-  tst.endTime = Date.now() + (timeLeft * 1000) + 50; //動作が遅れることを想定して終了時刻を0.05秒遅く設定
-  worker.postMessage([tst.endTime, true, false]);
-
-  tst.maxSeconds = timeLeft;
-  tst.beforeRemainingSeconds = timeLeft;
-  tst.isActivated = true;
-  tst.isAllowEnterToStart = false;
-
-  const minutesStr = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-  const secondsStr = String(timeLeft % 60).padStart(2, '0');
-
-  timerEl.clock.textContent = minutesStr + ":" + secondsStr;
-  timerEl.title.textContent = minutesStr + ":" + secondsStr + " Left";
-  timerEl.bar.style.width = (windouWidth < 769) ? (300 + "px") : (500 + "px");
-  timerEl.clock.style.display = "flex";
-  timerInputEl.field.style.display = "none";
-
-  for (let i = 0; i < timerEl.quickStartButtons.length; i++) {
-    timerEl.quickStartButtons[i].style.color = "transparent";
-    timerEl.quickStartButtons[i].style.filter = "blur(10px)";
-  }
-  setTimeout(() => {
-    timerEl.quickStartDiv.style.display = "none";
-  }, 300);
-
-  timerEl.startButton.style.display = "none";
-  timerEl.pauseButton.style.display = "inline-block";
-
-  console.log("[" + getRealTimeStr() + "] started\nlength: " + (getRemainingSeconds()));
-}
-
-
-
-//指定入力された時間でタイマーを開始する
-function startFromInput() {
-  const newTime = ((Number(timerInputEl.minutes.value) * 60) + Number(timerInputEl.seconds.value));
-  if (newTime == 0) {
-    return;
-  }
-
-  start(newTime)
-}
-
-
-
-//一時停止
-function pause() {
-  tst.isActivated = false;
-  worker.postMessage([tst.endTime, false]);
-
-  if (Math.floor((tst.endTime - Date.now()) / 1000) < 1) { //タイマーが鳴っていれば終了する
-    reset();
-    return;
-  }
-
-  tst.pausedTime = Date.now();
-
-  tabIcon.href = "mg_icon_gray.ico";
-
-  timerEl.resumeButton.style.display = "inline-block";
-  timerEl.resetButton.style.display = "inline-block";
-  timerEl.pauseButton.style.display = "none";
-
-  const minutesStr = String(Math.floor(getRemainingSeconds() / 60)).padStart(2, '0');
-  const secondsStr = String(getRemainingSeconds() % 60).padStart(2, '0');
-  timerEl.title.textContent = minutesStr + ":" + secondsStr + " ■PAUSED■";
-
-}
-
-
-
-//再開
-function resume() {
-  tst.isActivated = true;
-  const now = Date.now();
-  tst.endTime += ((now - tst.pausedTime));
-  worker.postMessage([tst.endTime, true]);
+function speechCurrentTime() {
 
   setTimeout(() => {
-    updateClockDisplay(getRemainingSeconds());
-  }, getRemainingSeconds(true)%1000 +10);
+      if ((time.seconds == 0) && (!clockEl.muteCheckbox.checked)) {
 
-  const remainingSeconds = getRemainingSeconds();
-  const minutesStr = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
-  const secondsStr = String(remainingSeconds % 60).padStart(2, '0');
+          let msg = new SpeechSynthesisUtterance(+time.hour + "時、" + time.minutes + "分、です");
+          if (time.minutes == 0) msg = new SpeechSynthesisUtterance(+time.hour + "時、ちょうど、です");
 
-  tabIcon.href = "mg_icon.ico";
-  timerEl.resumeButton.style.display = "none";
-  timerEl.resetButton.style.display = "none";
-  timerEl.pauseButton.style.display = "inline-block";
-  timerEl.title.textContent = (minutesStr + ":" + secondsStr);
+          msg.volume = clock.volume;
+          window.speechSynthesis.speak(msg);
+
+      }
+    }, 10);
 
 }
 
 
+function highlight() {
+  body.style.backgroundColor = "white";
+  clockEl.bar.style.backgroundColor = "black";
+  clockEl.optionIcon.style.filter = "invert(100%)";
+  clockEl.muteIcon.style.filter = "invert(100%)";
 
-//タイマーを終了
-function reset() {
-  tst.isActivated = false;
-  worker.postMessage([undefined, false, true]);
+    clockEl.colorableFont.forEach(el => {
+      el.style.color = "black";
+    });
+}
 
-  timerEl.title.textContent = "Timer";
-  timerEl.clock.textContent = "00:00";
-  timerEl.bar.style.width = "0px";
 
-  body.style.backgroundColor = "#505050";
-  timerEl.clock.style.filter = "invert(0%)";
-  timerEl.quickStartDiv.style.display = "flex";
-  tabIcon.href = "mg_icon.ico";
+function unhighlight() {
+  body.style.backgroundColor = "rgb(80,80,80)";
+  clockEl.bar.style.backgroundColor = "white";
+  clockEl.optionIcon.style.filter = "invert(0%)";
+  clockEl.muteIcon.style.filter = "invert(0%)";
 
-  for (let i = 0; i < timerEl.quickStartButtons.length; i++) {
-    timerEl.quickStartButtons[i].style.color = "white";
-    timerEl.quickStartButtons[i].style.filter = "blur(0px)";
+  clockEl.colorableFont.forEach(el => {
+    el.style.color = "white";
+  });
+}
+
+
+function changeFrequency(number) {
+  clock.frequency = number
+
+  const selectedButton = document.getElementById(number);
+  for (let i = 0; i < clockEl.buttons.length; i++) {
+    clockEl.buttons[i].style.opacity = "40%";
   }
-  timerEl.clock.style.display = "none";
-  timerInputEl.field.style.display = "flex";
-
-  setTimeout(() => {
-    timerEl.pauseButton.removeAttribute("style");
-    timerEl.resumeButton.removeAttribute("style");
-    timerEl.resetButton.removeAttribute("style");
-
-    timerEl.startButton.style.display = "inline-block";
-  }, 1);
-
-  tst.endTime = undefined;
-  tst.startedTime = undefined;
-
-  setTimeout(() => {
-    tst.isAllowEnterToStart = true;
-  }, 100);
-
+  selectedButton.style.opacity = "100%";
 }
-
-
-//自動でタイマーを止める　を切り替える
-function setAutoStopMode() {
-  if (timerEl.autoStopCheckbox.checked) {
-    tst.isAutoStopEnabled = true;
-  } else {
-    tst.isAutoStopEnabled = false;
-  }
-}
-
 
 
 //音量を変更する
 function setVolume() {
-  const volume = timerEl.volumeBar.value;
-  timerEl.volumeBarLabel.textContent = ("Volume: " + volume + "%");
-  alarm.volume = volume * 0.01;
-}
+  const volume = clockEl.volumeBar.value;
+  clockEl.volumeBarLabel.textContent = ("Volume: " + volume + "%");
 
-
-
-//ガイドを非表示
-function hideGuide() {
-  setTimeout(() => {
-    timerEl.guide.forEach(el => {
-      el.style.color = "transparent";
-
-      setTimeout(() => {
-        el.style.display = "none";
-      }, 1500);
-
-    });
-  }, 10000);
-}
-
-
-/**
- * 
- * @returns {number}
- */
-function getRemainingSeconds(includeMilliseconds) {
-  if(includeMilliseconds) {
-    return Math.floor((tst.endTime - (Date.now())) / 1000)+(((tst.endTime - (Date.now())) % 1000) *0.0001);
+  if (clockEl.muteCheckbox.checked) {
+    clock.volume = 0;
   } else {
-  return Math.floor((tst.endTime - (Date.now())) / 1000);
+    clock.volume = volume * 0.01;
   }
 }
 
 
-/**
- * 
- * @returns {text}
- */
-function getRealTimeStr(includeMilliseconds) {
+//ミュート設定
+function setMute() {
+  if ((clockEl.muteCheckbox.checked && clockEl.muteIcon.alt == "Muted") || (!clockEl.muteCheckbox.checked && clockEl.muteIcon.alt == "Unmuted")) return;
+
+  if (clockEl.muteCheckbox.checked) {
+    clockEl.volumeBar.style.opacity = "20%";
+    clockEl.volumeBarLabel.style.opacity = "20%";
+    clockEl.bar.style.opacity = "40%";
+    clockEl.muteIcon.src = "img/muted.png"
+    clockEl.muteIcon.alt = "Muted";
+  } else {
+    clockEl.volumeBar.style.opacity = "100%";
+    clockEl.volumeBarLabel.style.opacity = "100%";
+    clockEl.bar.style.opacity = "100%";
+    clockEl.muteIcon.src = "img/unmuted.png";
+    clockEl.muteIcon.alt = "Unmuted";
+  }
+}
+
+
+function showMenu() {
+
+  if (clock.isMenuShown == true) {
+    clock.isMenuShown = false;
+
+    clockEl.optionIcon.style.rotate = "0deg";
+    clockEl.optionIcon.style.opacity = "40%";
+
+    clockEl.menu.style.filter = "opacity(0%)";
+    clockEl.menu.style.pointerEvents = "none";
+
+  } else {
+
+    clock.isMenuShown = true;
+
+    clockEl.optionIcon.style.rotate = "90deg";
+    clockEl.optionIcon.style.opacity = "100%";
+
+    clockEl.menu.style.filter = "opacity(100%)";
+    clockEl.menu.style.pointerEvents = "auto";
+  }
+
+}
+
+
+function updateTime() {
   const realTime = new Date();
-  const hoursStr = String(Math.floor(realTime.getHours())).padStart(2, '0');
-  const minutesStr = String(Math.floor(realTime.getMinutes())).padStart(2, '0');
-  const secondsStr = String(realTime.getSeconds()).padStart(2, '0');
-  if (includeMilliseconds) {return (hoursStr + ":" + minutesStr + ":" + secondsStr+"."+realTime.getMilliseconds());}
-  else {return (hoursStr + ":" + minutesStr + ":" + secondsStr);}
+
+    time = {
+      hour: realTime.getHours(),
+      minutes: realTime.getMinutes(),
+      seconds: realTime.getSeconds(),
+
+      hourStr: String(realTime.getHours()).padStart(2, '0'),
+      minutesStr: String(realTime.getMinutes()).padStart(2, '0'),
+      secondsStr: String(realTime.getSeconds()).padStart(2, '0')
+    }
+
 }
