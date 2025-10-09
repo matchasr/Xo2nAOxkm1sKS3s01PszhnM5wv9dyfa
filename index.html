@@ -18,15 +18,28 @@
 
 <body id="body">
   <div class="menu" id="menu">
-    <button type=“button” onclick="focusOn(0);" class="focusa" id="focus-0"> <img
+    <button type=“button” onclick="focusOn(0);" class="focusa focus" id="focus-0"> <img
         src="assets/icons/timer_transparent.png" class="menu-icon"> </button>
-    <button type=“button” onclick="focusOn(1);" class="focusb" id="focus-1"> <img
+    <button type=“button” onclick="focusOn(1);" class="focusb focus" id="focus-1"> <img
         src="assets/icons/asmr_transparent.png" class="menu-icon"> </button>
-    <button type=“button” onclick="focusOn(2);" class="focusb" id="focus-2"> <img
+    <button type=“button” onclick="focusOn(2);" class="focusb focus" id="focus-2"> <img
         src="assets/icons/ambience_transparent.png" class="menu-icon"> </button>
-    <button type=“button” onclick="focusOn(3);" class="focusb" id="focus-3"> <img
+    <button type=“button” onclick="focusOn(3);" class="focusb focus" id="focus-3"> <img
         src="assets/icons/dream_transparent.png" class="menu-icon"> </button>
+    <button type=“button” onclick="focusOn(4);" class="focusb focus" id="focus-4"> <img
+        src="assets/icons/bgm.png" class="menu-icon"> </button>
   </div>
+
+  <!--開発中-->
+  <!--
+  <div id="global">
+    <div id="ios-mode-div">
+    <input type="checkbox" id="ios-mode" name="ios-mode" onclick="setIosMode();">
+          <label for="ios-mode" id="ios-mode-label"> <img src="img/ios_mode.png" alt="" height="20px" width="20px"
+              id="ios-mode-icon"> </label>
+              </div>
+  </div>
+  -->
 
   <div class="url" id="url-0">
 
@@ -36,7 +49,7 @@
     <div id="time-bar2"></div>
 
     <div id="openclose">
-      <button type=“button” onclick="showMenu();" class="option-button" id="option-button"> <img src="img/option2.png"
+      <button type=“button” onclick="switchMenu();" class="option-button" id="option-button"> <img src="img/option2.png"
           alt="option" height="20px" width="20px" id="option-icon"> </button>
 
       <div class="clock-menu" id="clock-menu">
@@ -51,7 +64,7 @@
             <option value="30"></option>
           </datalist>
 
-          <input type="checkbox" id="mute" name="mute" checked>
+          <input type="checkbox" id="mute" name="mute">
           <label for="mute" id="mute-label"> <img src="img/unmuted.png" alt="Unmuted" height="20px" width="20px"
               id="mute-icon"> </label>
 
@@ -76,17 +89,38 @@
 
 
 
+  <div id="playlist-global">
+  <div id="visible-player-div">
+    <input type="checkbox" name="visible-player" id="visible-player">
+    <label for="visible-player" id="visible-player-label" onclick="switchFrameFilter()"> <img src="img/smaller.png" id="smaller"> </label>
+  </div>
+  </div>
 
   <div class="listDiv" id="url-1">
-    <button type="button" onclick="loadPlaylistASMR()" class="lp" id="loadPlaylistASMR">Load</button>
+    <button type="button" onclick="loadPlaylist(1)" class="lp" id="loadPlaylistASMR">Load</button>
+    <button type=“button” class="frame-cover prf"></button>
+    <button type=“button” class="frame-cover logo"></button>
+    <!--<button type="button" onclick="unloadPlaylistASMR()" class="lp" id="unloadPlaylistASMR">-</button>-->
   </div>
 
   <div class="listDiv" id="url-2">
-    <button type="button" onclick="loadPlaylistAmbience()" class="lp" id="loadPlaylistAmbience">Load</button>
+    <button type="button" onclick="loadPlaylist(2)" class="lp" id="loadPlaylistAmbience">Load</button>
+    <button type=“button” class="frame-cover prf"></button>
+    <button type=“button” class="frame-cover logo"></button>
+    <!--<button type="button" onclick="unloadPlaylistAmbience()" class="lp" id="unloadPlaylistAmbience">-</button>-->
   </div>
 
   <div class="listDiv" id="url-3">
-    <button type="button" onclick="loadPlaylistDream()" class="lp" id="loadPlaylistDream">Load</button>
+    <button type="button" onclick="loadPlaylist(3)" class="lp" id="loadPlaylistDream">Load</button>
+    <button type=“button” class="frame-cover prf"></button>
+    <button type=“button” class="frame-cover logo"></button>
+    <!--<button type="button" onclick="unloadPlaylistDream()" class="lp" id="unloadPlaylistDream">-</button>-->
+  </div>
+
+  <div class="listDiv" id="url-4">
+    <button type="button" onclick="loadPlaylist(4)" class="lp" id="loadPlaylistBGM">Load</button>
+    <button type=“button” class="frame-cover prf"></button>
+    <button type=“button” class="frame-cover logo"></button>
   </div>
 
   <script src="main.js"></script>

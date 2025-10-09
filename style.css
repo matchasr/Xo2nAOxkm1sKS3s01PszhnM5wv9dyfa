@@ -34,6 +34,8 @@ button {
   transition: all 0.15s ease-out;
 }
 
+
+/* CLOCK */
 .cf {
   position: relative;
   opacity: 40%;
@@ -108,10 +110,12 @@ button {
   transition: all 0.1s ease-out;
 }
 
-#mute, #ios-mode {
+#mute, #ios-mode, #visible-player {
   -ms-transform: scale(0, 0);
   -webkit-transform: scale(0, 0);
   transform: scale(0, 0);
+  height: 0px;
+  width: 0px;
 }
 
 #announcement-interval-menu {
@@ -175,6 +179,8 @@ button {
 
 
 
+
+/* MENU */
 #menu {
   display: flex;
   position: absolute;
@@ -208,6 +214,8 @@ button {
   image-rendering: crisp-edges;
 }
 
+
+
 #focus-0 {
   color: white;
 }
@@ -223,6 +231,10 @@ button {
   display: none;
   margin-top: 45px;
 }
+#url-4 {
+  display: none;
+  margin-top: 45px;
+}
 .focusb {
   margin-left: 7px;
   opacity: 20%;
@@ -233,6 +245,7 @@ button {
 }
 
 
+/* LOAD BUTTON */
 .lp {
   color: white;
   background-color: gray;
@@ -245,6 +258,8 @@ button {
   background-color: transparent;
 }
 
+
+/* PLAYLIST FRAME */
 .frame {
   margin-top: 15px;
   width: 483;
@@ -257,6 +272,39 @@ button {
 }
 .frame:hover {
   filter:contrast(80%) saturate(0%);
+}
+.visible-frame {
+  filter:contrast(80%) saturate(0%) blur(3px);
+  overflow: hidden;
+}
+.visible-frame:hover {
+  filter:contrast(80%) saturate(80%);
+}
+
+.frame-cover {
+  position: absolute;
+
+  z-index: 1000;
+}
+.frame-cover.prf {
+  width: 365px;
+  height: 41px;
+
+  left: 40px;
+  top: 71px;
+}
+.frame-cover.logo {
+  width: 67px;
+  height: 37px;
+
+  left: 434px;
+  top: 295px;
+}
+.frame-cover:hover ~ .frame{
+  filter:contrast(80%) saturate(0%);
+}
+.frame-cover:hover ~ .visible-frame {
+  filter:contrast(80%) saturate(80%);
 }
 
 .frame-icon {
@@ -275,12 +323,42 @@ button {
   opacity: 30%;
 
   user-select: none;
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.15s ease-out;
 }
-.listDiv:hover .frame-icon {
+.frame:hover + .frame-icon {
+  opacity: 0%;
+}
+.frame-cover:hover ~ .frame-icon {
+  opacity: 0%;
+}
+.visible-frame + .frame-icon {
   opacity: 0%;
 }
 
+#playlist-global {
+  visibility: hidden;
+}
+#visible-player-div {
+  position: absolute;
+  left: 520px;
+  top: 300px;
+}
+#visible-player-label {
+  position: absolute;
+}
+
+#visible-player:checked ~ #visible-player-label #smaller {
+  opacity: 100%;
+}
+#smaller {
+  height: 24px;
+  width: 24px;
+  opacity: 30%;
+  transition: all 0.15s ease-in-out;
+}
+
+
+/* OTHER */
 
 #ios-mode-div {
   position: absolute;
