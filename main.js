@@ -1,8 +1,3 @@
-/*
-todo
-
-・Iosモード実装　→　#menu常駐, .frame常時表示
-*/
 const body = document.getElementById("body");
 const tabIcon = document.getElementById("icon");
 

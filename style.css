@@ -4,7 +4,7 @@ body {
   margin-left: 30px;
   margin-top: 30px;
   transition: all 1s ease-out;
-  
+
 
   font-family: "Raleway", "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", sans-serif;
   font-weight: 100;
@@ -13,6 +13,7 @@ body {
   font-size: 18px;
   letter-spacing: 0.05em;
 }
+
 img {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
@@ -40,6 +41,7 @@ button {
   position: relative;
   opacity: 40%;
 }
+
 .cf::before {
   background-color: transparent;
   content: "";
@@ -58,6 +60,7 @@ button {
 
   transition: all 0.15s ease-out;
 }
+
 .cf:hover::before {
   transform: scale(1, 1);
 }
@@ -69,10 +72,12 @@ button {
   align-items: center;
   transition: all 0.3s ease-out;
 }
+
 #option-button {
   position: absolute;
-  top: 30px;
+  top: 50px;
 }
+
 #option-icon {
   opacity: 40%;
   transition: all 0.3s ease-out;
@@ -84,6 +89,7 @@ button {
   filter: opacity(0%);
   transition: all 0.2s ease-out;
 }
+
 #clock-menu button {
   display: inline-block;
 }
@@ -95,6 +101,7 @@ button {
   transition: all 0.3s ease-out;
 
 }
+
 #volume-bar {
   height: 30px;
   margin-top: 0px;
@@ -105,12 +112,15 @@ button {
 
   transition: all 0.1s ease-out;
 }
+
 #volume-bar-label {
   float: right;
   transition: all 0.1s ease-out;
 }
 
-#mute, #ios-mode, #visible-player {
+#mute,
+#ios-mode,
+#visible-player {
   -ms-transform: scale(0, 0);
   -webkit-transform: scale(0, 0);
   transform: scale(0, 0);
@@ -148,6 +158,7 @@ button {
   transform: translate(-50%, 0);
   transition: all 1s ease-out;
 }
+
 #time-bar2 {
   width: 408px;
   height: 1px;
@@ -184,29 +195,33 @@ button {
 #menu {
   display: flex;
   position: absolute;
-  top: -40px;
+  top: -25px;
   padding-inline: 50px;
   padding-bottom: 15px;
   padding-top: 10px;
   margin-inline: -50px;
   opacity: 0%;
-  filter: blur(10px);
+  filter: blur(5px);
 
   border: none;
 
   transition: all 0.2s ease-out;
 }
+
 #menu:hover {
-  top: -5px;
+  top: -3px;
   opacity: 100%;
   filter: blur(0px);
 }
-#menu:hover + #shortcuts {
+
+#menu:hover+#shortcuts {
   display: none;
 }
+
 #menu button {
   transition: opacity 0.15s ease-out;
 }
+
 .menu-icon {
   height: 26px;
   width: 26px;
@@ -219,22 +234,31 @@ button {
 #focus-0 {
   color: white;
 }
+
+#url-0 {
+  margin-top: 50px;
+}
+
 #url-1 {
   display: none;
   margin-top: 45px;
 }
+
 #url-2 {
   display: none;
   margin-top: 45px;
 }
+
 #url-3 {
   display: none;
   margin-top: 45px;
 }
+
 #url-4 {
   display: none;
   margin-top: 45px;
 }
+
 .focusb {
   margin-left: 7px;
   opacity: 20%;
@@ -250,12 +274,29 @@ button {
   color: white;
   background-color: gray;
   text-align: center;
-  position:absolute;
+  position: absolute;
 
   transition: all 0.25s ease-out;
 }
+
 .lp:hover {
   background-color: transparent;
+}
+
+.ulp {
+  display: none;
+  opacity: 30%;
+
+  position: absolute;
+  left: 520px;
+  top: 260px;
+
+  transition: all 0.25s ease-out;
+}
+
+.reload {
+  height: 26px;
+  width: 26px;
 }
 
 
@@ -265,20 +306,23 @@ button {
   width: 483;
   height: 271.5;
 
-  filter:contrast(0%) saturate(0%);
+  filter: contrast(0%) saturate(0%);
   position: relative;
   z-index: 100;
   transition: all 0.3s ease-out;
 }
+
 .frame:hover {
-  filter:contrast(80%) saturate(0%);
+  filter: contrast(80%) saturate(0%);
 }
+
 .visible-frame {
-  filter:contrast(80%) saturate(0%) blur(3px);
+  filter: contrast(80%) saturate(0%) blur(3px);
   overflow: hidden;
 }
+
 .visible-frame:hover {
-  filter:contrast(80%) saturate(80%);
+  filter: contrast(80%) saturate(80%);
 }
 
 .frame-cover {
@@ -286,6 +330,7 @@ button {
 
   z-index: 1000;
 }
+
 .frame-cover.prf {
   width: 365px;
   height: 41px;
@@ -293,6 +338,7 @@ button {
   left: 40px;
   top: 71px;
 }
+
 .frame-cover.logo {
   width: 67px;
   height: 37px;
@@ -300,11 +346,13 @@ button {
   left: 434px;
   top: 295px;
 }
-.frame-cover:hover ~ .frame{
-  filter:contrast(80%) saturate(0%);
+
+.frame-cover:hover~.frame {
+  filter: contrast(80%) saturate(0%);
 }
-.frame-cover:hover ~ .visible-frame {
-  filter:contrast(80%) saturate(80%);
+
+.frame-cover:hover~.visible-frame {
+  filter: contrast(80%) saturate(80%);
 }
 
 .frame-icon {
@@ -314,7 +362,7 @@ button {
   transform: translate(-50%, 0);
   z-index: 101;
   pointer-events: none;
-  
+
 
   height: 26px;
   width: 26px;
@@ -325,34 +373,40 @@ button {
   user-select: none;
   transition: opacity 0.15s ease-out;
 }
-.frame:hover + .frame-icon {
+
+.frame:hover+.frame-icon {
   opacity: 0%;
 }
-.frame-cover:hover ~ .frame-icon {
+
+.frame-cover:hover~.frame-icon {
   opacity: 0%;
 }
-.visible-frame + .frame-icon {
+
+.visible-frame+.frame-icon {
   opacity: 0%;
 }
 
 #playlist-global {
   visibility: hidden;
 }
+
 #visible-player-div {
   position: absolute;
   left: 520px;
   top: 300px;
 }
+
 #visible-player-label {
   position: absolute;
 }
 
-#visible-player:checked ~ #visible-player-label #smaller {
+#visible-player:checked~#visible-player-label #visible {
   opacity: 100%;
 }
-#smaller {
-  height: 24px;
-  width: 24px;
+
+#visible {
+  height: 26px;
+  width: 26px;
   opacity: 30%;
   transition: all 0.15s ease-in-out;
 }
@@ -367,6 +421,36 @@ button {
 }
 
 
+#menu.menu-shown {
+  top: -3px;
+  opacity: 100%;
+  filter: blur(0px);
+}
+
+#menu.menu-shown-extended {
+  top: -3px;
+  opacity: 100%;
+  filter: blur(0px);
+}
+
+@keyframes menuflash {
+  0% {}
+
+  20% {
+    top: -3px;
+    opacity: 100%;
+    filter: blur(0px);
+  }
+
+  80% {
+    top: -3px;
+    opacity: 100%;
+    filter: blur(0px);
+  }
+
+  100% {}
+}
+
 
 
 @media screen and (max-width: 768px) {
@@ -375,14 +459,17 @@ button {
     flex-wrap: wrap;
   }
 
-  #time, #input-field input {
+  #time,
+  #input-field input {
     font-size: 100px;
   }
+
   #input-field input {
     width: 120px;
     overflow: hidden;
   }
-  #input-field .input-colon{
+
+  #input-field .input-colon {
     font-size: 100px;
     transform: translateY(31px);
   }
@@ -391,7 +478,32 @@ button {
     transform: translate(-50%, -36px);
   }
 
-  #time-bar, #time-bar2 {
+  #time-bar,
+  #time-bar2 {
     transform: translate(-50%, -30px);
+  }
+}
+
+
+@media screen and (hover: none) and (pointer: coarse) {
+  /*タッチ操作のとき*/
+
+  #menu {
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding-inline: 50px;
+    padding-top: 15px;
+
+    opacity: 100%;
+    filter: blur(0px);
+  }
+
+  #menu:hover {
+    top: 0px;
+  }
+
+  #menu button {
+    padding: 0px 8px 0px 8px
   }
 }

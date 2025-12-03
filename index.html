@@ -42,8 +42,6 @@
   -->
 
   <div class="url" id="url-0">
-
-    <!--時間-->
     <p id="time" class="time colorable-font"></p>
     <div id="time-bar"></div>
     <div id="time-bar2"></div>
@@ -91,34 +89,35 @@
 
   <div id="playlist-global">
   <div id="visible-player-div">
-    <input type="checkbox" name="visible-player" id="visible-player">
-    <label for="visible-player" id="visible-player-label" onclick="switchFrameFilter()"> <img src="img/smaller.png" id="smaller"> </label>
+    <input type="checkbox" name="visible-player" id="visible-player" checked>
+    <label for="visible-player" id="visible-player-label" onclick="switchFrameFilter()"> <img src="img/eye.png" id="visible"> </label>
   </div>
   </div>
 
   <div class="listDiv" id="url-1">
-    <button type="button" onclick="loadPlaylist(1)" class="lp" id="loadPlaylistASMR">Load</button>
+    <button type="button" onclick="loadPlaylist(1)" class="lp" id="loadPlaylistBtn-1">Load</button>
+    <button type="button" onclick="reloadPlaylist(1)" class="ulp" id="reloadPlaylistBtn-1"><img src="img/reload.png" class="reload"></button>
     <button type=“button” class="frame-cover prf"></button>
     <button type=“button” class="frame-cover logo"></button>
-    <!--<button type="button" onclick="unloadPlaylistASMR()" class="lp" id="unloadPlaylistASMR">-</button>-->
   </div>
 
   <div class="listDiv" id="url-2">
-    <button type="button" onclick="loadPlaylist(2)" class="lp" id="loadPlaylistAmbience">Load</button>
+    <button type="button" onclick="loadPlaylist(2)" class="lp" id="loadPlaylistBtn-2">Load</button>
+    <button type="button" onclick="reloadPlaylist(2)" class="ulp" id="reloadPlaylistBtn-2"><img src="img/reload.png" class="reload"></button>
     <button type=“button” class="frame-cover prf"></button>
     <button type=“button” class="frame-cover logo"></button>
-    <!--<button type="button" onclick="unloadPlaylistAmbience()" class="lp" id="unloadPlaylistAmbience">-</button>-->
   </div>
 
   <div class="listDiv" id="url-3">
-    <button type="button" onclick="loadPlaylist(3)" class="lp" id="loadPlaylistDream">Load</button>
+    <button type="button" onclick="loadPlaylist(3)" class="lp" id="loadPlaylistBtn-3">Load</button>
+    <button type="button" onclick="reloadPlaylist(3)" class="ulp" id="reloadPlaylistBtn-3"><img src="img/reload.png" class="reload"></button>
     <button type=“button” class="frame-cover prf"></button>
     <button type=“button” class="frame-cover logo"></button>
-    <!--<button type="button" onclick="unloadPlaylistDream()" class="lp" id="unloadPlaylistDream">-</button>-->
   </div>
 
   <div class="listDiv" id="url-4">
-    <button type="button" onclick="loadPlaylist(4)" class="lp" id="loadPlaylistBGM">Load</button>
+    <button type="button" onclick="loadPlaylist(4)" class="lp" id="loadPlaylistBtn-4">Load</button>
+    <button type="button" onclick="reloadPlaylist(4)" class="ulp" id="reloadPlaylistBtn-4"><img src="img/reload.png" class="reload"></button>
     <button type=“button” class="frame-cover prf"></button>
     <button type=“button” class="frame-cover logo"></button>
   </div>
