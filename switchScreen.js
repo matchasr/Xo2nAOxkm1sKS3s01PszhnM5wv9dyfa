@@ -30,15 +30,17 @@ function focusOn(index) {
 let swipeStartX = 0;
 let swipeEndX = 0;
 
-window.addEventListener('touchstart', (ev) => { swipeStartX = ev.touches[0].clientX; });
+window.addEventListener('touchstart', (ev) => { swipeStartX = ev.touches[0].clientX });
 
-window.addEventListener('touchmove', (ev) => { swipeEndX = ev.touches[0].clientX; });
+window.addEventListener('touchmove', (ev) => { swipeEndX = ev.touches[0].clientX });
 
 window.addEventListener('touchend', () => {
 
   const diff = swipeEndX - swipeStartX;
 
-  if (Math.abs(diff) > 30) {
+  if(swipeEndX == 0) return;
+
+  if (Math.abs(diff) > 50) {
     if (diff > 0) {
       if (nowPage == 0) return;
       focusOn(nowPage - 1);
@@ -49,6 +51,10 @@ window.addEventListener('touchend', () => {
 
     }
   }
+
+  swipeStartX = 0;
+  swipeEndX = 0;
+
 });
 
 
