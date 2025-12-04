@@ -20,7 +20,9 @@ const clockEl = {
   colorableFont: document.querySelectorAll(".colorable-font"),
 
   visiblePlayerCheckbox: document.getElementById("visible-player"),
-  frameCover: document.querySelectorAll(".frame-cover")
+  frameCover: document.querySelectorAll(".frame-cover"),
+
+  cookieModeCheckbox: document.getElementById("cookie-mode")
 }
 
 let clock = {

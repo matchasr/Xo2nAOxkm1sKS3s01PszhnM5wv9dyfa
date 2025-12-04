@@ -118,9 +118,7 @@ button {
   transition: all 0.1s ease-out;
 }
 
-#mute,
-#ios-mode,
-#visible-player {
+.inv-checkbox {
   -ms-transform: scale(0, 0);
   -webkit-transform: scale(0, 0);
   transform: scale(0, 0);
@@ -386,25 +384,28 @@ button {
   opacity: 0%;
 }
 
+
+
+/*---------- FRAME OPTIONS ----------*/
 #playlist-global {
   visibility: hidden;
 }
 
-#visible-player-div {
+#frame-options {
   position: absolute;
+  display: flex;
   left: 520px;
   top: 300px;
+  height: 26px;
+  width: 100px;
 }
 
-#visible-player-label {
-  position: absolute;
-}
-
-#visible-player:checked~#visible-player-label #visible {
+#visible-player:checked~#visible-player-label #visible,
+#cookie-mode:checked~#cookie-mode-label #cookie-img {
   opacity: 100%;
 }
 
-#visible {
+#visible, #cookie-img {
   height: 26px;
   width: 26px;
   opacity: 30%;
@@ -412,13 +413,7 @@ button {
 }
 
 
-/* OTHER */
-
-#ios-mode-div {
-  position: absolute;
-  right: 30px;
-  bottom: 30px;
-}
+/*---------- OTHER ----------*/
 
 
 #menu.menu-shown {

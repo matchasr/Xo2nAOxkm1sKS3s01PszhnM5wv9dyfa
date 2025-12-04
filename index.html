@@ -30,17 +30,6 @@
         src="assets/icons/bgm.png" class="menu-icon"> </button>
   </div>
 
-  <!--開発中-->
-  <!--
-  <div id="global">
-    <div id="ios-mode-div">
-    <input type="checkbox" id="ios-mode" name="ios-mode" onclick="setIosMode();">
-          <label for="ios-mode" id="ios-mode-label"> <img src="img/ios_mode.png" alt="" height="20px" width="20px"
-              id="ios-mode-icon"> </label>
-              </div>
-  </div>
-  -->
-
   <div class="url" id="url-0">
     <p id="time" class="time colorable-font"></p>
     <div id="time-bar"></div>
@@ -62,7 +51,7 @@
             <option value="30"></option>
           </datalist>
 
-          <input type="checkbox" id="mute" name="mute">
+          <input type="checkbox" id="mute" name="mute" class="inv-checkbox">
           <label for="mute" id="mute-label"> <img src="img/unmuted.png" alt="Unmuted" height="20px" width="20px"
               id="mute-icon"> </label>
 
@@ -88,36 +77,37 @@
 
 
   <div id="playlist-global">
-  <div id="visible-player-div">
-    <input type="checkbox" name="visible-player" id="visible-player" checked>
+  <div id="frame-options">
+    <input type="checkbox" name="visible-player" id="visible-player" class="inv-checkbox" checked>
     <label for="visible-player" id="visible-player-label" onclick="switchFrameFilter()"> <img src="img/eye.png" id="visible"> </label>
+
+    <input type="checkbox" name="cookie-mode" id="cookie-mode" class="inv-checkbox">
+    <label for="cookie-mode" id="cookie-mode-label" onclick="switchFrameCookie()"> <img src="img/cookie.png" id="cookie-img"> </label>
+
+    <button type="button" onclick="reloadPlaylist(nowPage)" id="reload-button"><img src="img/reload.png" class="reload"></button>
   </div>
   </div>
 
   <div class="listDiv" id="url-1">
     <button type="button" onclick="loadPlaylist(1)" class="lp" id="loadPlaylistBtn-1">Load</button>
-    <button type="button" onclick="reloadPlaylist(1)" class="ulp" id="reloadPlaylistBtn-1"><img src="img/reload.png" class="reload"></button>
     <button type=“button” class="frame-cover prf"></button>
     <button type=“button” class="frame-cover logo"></button>
   </div>
 
   <div class="listDiv" id="url-2">
     <button type="button" onclick="loadPlaylist(2)" class="lp" id="loadPlaylistBtn-2">Load</button>
-    <button type="button" onclick="reloadPlaylist(2)" class="ulp" id="reloadPlaylistBtn-2"><img src="img/reload.png" class="reload"></button>
     <button type=“button” class="frame-cover prf"></button>
     <button type=“button” class="frame-cover logo"></button>
   </div>
 
   <div class="listDiv" id="url-3">
     <button type="button" onclick="loadPlaylist(3)" class="lp" id="loadPlaylistBtn-3">Load</button>
-    <button type="button" onclick="reloadPlaylist(3)" class="ulp" id="reloadPlaylistBtn-3"><img src="img/reload.png" class="reload"></button>
     <button type=“button” class="frame-cover prf"></button>
     <button type=“button” class="frame-cover logo"></button>
   </div>
 
   <div class="listDiv" id="url-4">
     <button type="button" onclick="loadPlaylist(4)" class="lp" id="loadPlaylistBtn-4">Load</button>
-    <button type="button" onclick="reloadPlaylist(4)" class="ulp" id="reloadPlaylistBtn-4"><img src="img/reload.png" class="reload"></button>
     <button type=“button” class="frame-cover prf"></button>
     <button type=“button” class="frame-cover logo"></button>
   </div>

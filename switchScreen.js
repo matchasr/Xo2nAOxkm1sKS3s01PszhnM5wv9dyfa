@@ -79,10 +79,12 @@ window.addEventListener('wheel', (ev) => {
 });
 
 
+/*
 setInterval(() => {
   if (wheelPowerX == 0) wheelEventStep = 0;
   console.log("wheelPowerX: " + wheelPowerX);
 }, 100);
+*/
 
 
 
