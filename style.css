@@ -413,7 +413,7 @@ button {
 }
 
 
-/*---------- OTHER ----------*/
+/*---------- STATUS ----------*/
 
 
 #menu.menu-shown {
@@ -426,6 +426,11 @@ button {
   top: -3px;
   opacity: 100%;
   filter: blur(0px);
+}
+
+
+.none {
+  display: none;
 }
 
 @keyframes menuflash {
