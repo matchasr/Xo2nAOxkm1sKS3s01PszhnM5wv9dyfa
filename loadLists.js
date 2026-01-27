@@ -33,7 +33,6 @@ let frameElements = frameElementsNoCookie;
 
 
 function loadPlaylist(index) {
-  console.log(typeof index)
   loadButton[index].style.display = "none";
 
   switch (index) {

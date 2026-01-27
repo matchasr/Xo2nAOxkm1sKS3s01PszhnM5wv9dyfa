@@ -2,6 +2,7 @@ const body = document.getElementById("body");
 const tabIcon = document.getElementById("icon");
 
 let windouWidth = window.innerWidth;
+let highlightState = false; //boolean
 
 const clockEl = {
   title: document.getElementById("title"),
@@ -44,52 +45,38 @@ let time = {
 }
 
 
-document.body.addEventListener(
-  "keydown",
-  (ev) => {
-    //ミュート[M]
-    if (ev.code == "KeyM") {
-      if (clockEl.muteCheckbox.checked) {
-        clockEl.muteCheckbox.checked = false;
-      } else {
-        clockEl.muteCheckbox.checked = true;
-      }
-      return;
-    }
 
-    if (ev.code == "KeyO") {
-      switchMenu();
-      return;
-    }
-  },
-  { once: false }
-);
-
-
-clockEl.menu.addEventListener("mouseenter", () => { clock.isHoveringOption = true });
-clockEl.menu.addEventListener("mouseleave", () => { clock.isHoveringOption = false });
-
-
-window.onload = function () {
-  Time();
-  const defaultButton = document.getElementById(clock.frequency);
-  defaultButton.style.opacity = "100%";
-
-  const waitms = (1030 - (new Date().getMilliseconds));
-  setTimeout(() => {
-    setInterval(Time, 1000);
-  }, waitms);
-}
-setInterval(setVolume, 30);
-setInterval(setMute, 30);
-setInterval(autoCloseMenu, 1000);
+//----------
 
 
 
 function Time() {
   updateTime();
 
+  const clockTitleText = time.hourStr + ":" + time.minutesStr;
+  clockEl.title.textContent = clockTitleText + ":" + time.secondsStr;
 
+  if (!document.hidden && nowPage == 0) updateClockDisplay();
+
+  if (((time.minutes % clock.frequency == 0) || time.minutes == 0) && time.seconds < 11) {
+    speechCurrentTime();
+    blinkTitle(clockTitleText, time.seconds);
+
+    if (!document.hidden && nowPage == 0 && highlightState == false) {
+      highlight();
+    }
+
+    return;
+  }
+
+  if (time.seconds > 10 && highlightState == true) {
+    unhighlight();
+  }
+}
+
+
+
+function updateClockDisplay() {
   const clockText = time.hourStr + "<span class='colon' id='colon'>:</span>" + time.minutesStr;
   const clockTitleText = time.hourStr + ":" + time.minutesStr;
   clockEl.clock.innerHTML = clockText;
@@ -98,6 +85,11 @@ function Time() {
 
 
   clockEl.bar.style.width = ((60 - time.seconds) * 7) + "px";
+  if (time.seconds < 11) {
+    clockEl.bar.classList.add("bloom");
+  } else {
+    clockEl.bar.classList.remove("bloom");
+  }
 
   const colon = document.getElementById("colon");
   if (time.seconds % 2 == 0) {
@@ -105,32 +97,20 @@ function Time() {
   } else {
     colon.style.opacity = "50%";
   }
-
-  //clockEl.bar.style.height = (time.seconds < 5) ? "5px" : "1px";
-  if (((time.minutes % clock.frequency == 0) || time.minutes == 0) && time.seconds < 11) {
-    speechCurrentTime();
-    blinkTitle(clockTitleText, time.seconds);
-    if (url0.style.display !== "none") highlight();
-    return;
-  }
-
-  unhighlight();
 }
-
-
-
 
 
 
 function blinkTitle(clockTitleText, seconds) {
   if (seconds % 2 == 1) {
-    title.innerHTML = (clockTitleText + " ■■■■■■■■");
+    title.textContent = (clockTitleText + " ■■■■■■■■");
     tabIcon.href = "mg_icon_aqua.ico";
   } else {
-    title.innerHTML = (clockTitleText + " □□□□□□□□");
+    title.textContent = (clockTitleText + " □□□□□□□□");
     tabIcon.href = "mg_icon.ico";
   }
 }
+
 
 
 function speechCurrentTime() {
@@ -150,43 +130,56 @@ function speechCurrentTime() {
 }
 
 
+
 function highlight() {
-  body.style.backgroundColor = "white";
-  clockEl.bar.style.backgroundColor = "black";
-  clockEl.optionIcon.style.filter = "invert(100%)";
-  clockEl.muteIcon.style.filter = "invert(100%)";
+  body.classList.add("highlight");
+  clockEl.bar.classList.add("highlight");
+  clockEl.optionIcon.classList.add("highlight");
+  clockEl.muteIcon.classList.add("highlight");
 
   clockEl.colorableFont.forEach(el => {
-    el.style.color = "black";
+    el.classList.add("highlight");
   });
+
+  highlightState = true;
 }
+
 
 
 function unhighlight() {
-  body.style.backgroundColor = "rgb(80,80,80)";
-  clockEl.bar.style.backgroundColor = "white";
-  clockEl.optionIcon.style.filter = "invert(0%)";
-  clockEl.muteIcon.style.filter = "invert(0%)";
+  body.classList.remove("highlight");
+  clockEl.bar.classList.remove("highlight");
+  clockEl.optionIcon.classList.remove("highlight");
+  clockEl.muteIcon.classList.remove("highlight");
 
   clockEl.colorableFont.forEach(el => {
-    el.style.color = "white";
+    el.classList.remove("highlight");
   });
+
+  highlightState = false;
 }
+
 
 
 function changeFrequency(number) {
-  clock.frequency = number
+  clock.frequency = number;
 
-  const selectedButton = document.getElementById(number);
-  for (let i = 0; i < clockEl.buttons.length; i++) {
-    clockEl.buttons[i].style.opacity = "40%";
-  }
-  selectedButton.style.opacity = "100%";
+  try {
+    const selectedButton = document.getElementById(number);
+    for (let i = 0; i < clockEl.buttons.length; i++) {
+      clockEl.buttons[i].style.opacity = "40%";
+    }
+    selectedButton.style.opacity = "100%";
+  } catch (e) { }
+
+  return clock.frequency;
 }
+
 
 
 //音量を変更する
 function setVolume() {
+  console.log("setvolume ran");
   const volume = clockEl.volumeBar.value;
   clockEl.volumeBarLabel.textContent = ("Volume: " + volume + "%");
 
@@ -198,8 +191,10 @@ function setVolume() {
 }
 
 
+
 //ミュート設定
 function setMute() {
+  console.log("setmute ran");
   if ((clockEl.muteCheckbox.checked && clockEl.muteIcon.alt == "Muted") || (!clockEl.muteCheckbox.checked && clockEl.muteIcon.alt == "Unmuted")) return;
 
   if (clockEl.muteCheckbox.checked) {
@@ -216,6 +211,7 @@ function setMute() {
     clockEl.muteIcon.alt = "Unmuted";
   }
 }
+
 
 
 function switchMenu() { //メニューの表示/非表示を切り替える
@@ -241,6 +237,7 @@ function switchMenu() { //メニューの表示/非表示を切り替える
   }
 
 }
+
 
 
 function updateTime() {
@@ -300,7 +297,6 @@ function switchFrameFilter() {
 
 
 
-
 function disableCover() {
 
   clockEl.frameCover.forEach(el => {
@@ -316,3 +312,57 @@ function disableCover() {
     });
   }, 1000);
 }
+
+
+
+//----------
+
+
+
+document.body.addEventListener(
+  "keydown",
+  (ev) => {
+    //ミュート[M]
+    if (ev.code == "KeyM") {
+      if (clockEl.muteCheckbox.checked) {
+        clockEl.muteCheckbox.checked = false;
+      } else {
+        clockEl.muteCheckbox.checked = true;
+      }
+      setMute();
+      return;
+    }
+
+    if (ev.code == "KeyO") {
+      switchMenu();
+      return;
+    }
+  },
+  { once: false }
+);
+
+
+clockEl.menu.addEventListener("mouseenter", () => { clock.isHoveringOption = true });
+clockEl.menu.addEventListener("mouseleave", () => { clock.isHoveringOption = false });
+
+
+window.onload = function () {
+  Time();
+  const defaultButton = document.getElementById(clock.frequency);
+  defaultButton.style.opacity = "100%";
+
+  const waitms = (1030 - (new Date().getMilliseconds));
+  setTimeout(() => {
+    setInterval(Time, 1000);
+  }, waitms);
+}
+
+
+
+//----------
+
+
+
+clockEl.volumeBar.addEventListener("change", setVolume);
+clockEl.muteCheckbox.addEventListener("change", setMute);
+setInterval(autoCloseMenu, 1000);
