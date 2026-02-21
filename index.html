@@ -12,105 +12,119 @@
 
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
 </head>
 
 <body id="body">
-  <div class="menu" id="menu">
-    <button type=“button” onclick="focusOn(0);" class="focusa focus" id="focus-0"> <img
-        src="assets/icons/timer_transparent.png" class="menu-icon"> </button>
-    <button type=“button” onclick="focusOn(1);" class="focusb focus" id="focus-1"> <img
-        src="assets/icons/asmr_transparent.png" class="menu-icon"> </button>
-    <button type=“button” onclick="focusOn(2);" class="focusb focus" id="focus-2"> <img
-        src="assets/icons/ambience_transparent.png" class="menu-icon"> </button>
-    <button type=“button” onclick="focusOn(3);" class="focusb focus none" id="focus-3"> <img
-        src="assets/icons/dream_transparent.png" class="menu-icon"> </button>
-    <button type=“button” onclick="focusOn(4);" class="focusb focus" id="focus-4"> <img
-        src="assets/icons/bgm.png" class="menu-icon"> </button>
-  </div>
+  <div id="menubar" class="silkscreen">
+    <div class="menu" id="menu">
+      <button type=“button” onclick="focusOn(0);" class="tab-button-selected" id="focus-0"> <img
+          src="assets/icons/timer_transparent.png" class="menu-icon"> </button>
 
-  <div class="url" id="url-0">
-    <p id="time" class="time colorable-font"></p>
-    <div id="time-bar"></div>
-    <div id="time-bar2"></div>
+      <button type=“button” onclick="focusOn(1);" id="focus-1"> <img
+          src="assets/icons/asmr_transparent.png" class="menu-icon"> </button>
 
-    <div id="openclose">
-      <button type=“button” onclick="switchMenu();" class="option-button" id="option-button"> <img src="img/option2.png"
-          alt="option" height="20px" width="20px" id="option-icon"> </button>
+      <button type=“button” onclick="focusOn(2);" id="focus-2"> <img
+          src="assets/icons/ambience_transparent.png" class="menu-icon"> </button>
 
-      <div class="clock-menu" id="clock-menu">
-        <!--音量設定-->
-        <div id="volume-option-div">
-
-          <input type="range" id="volume-bar" class="volume-bar" name="volume-bar" min="0" max="100" value="30" step="1"
-            list="markers" />
-          <label for="volume-bar" id="volume-bar-label" class="colorable-font">Volume: 30%</label>
-
-          <datalist id="markers">
-            <option value="30"></option>
-          </datalist>
-
-          <input type="checkbox" id="mute" name="mute" class="inv-checkbox">
-          <label for="mute" id="mute-label"> <img src="img/unmuted.png" alt="Unmuted" height="20px" width="20px"
-              id="mute-icon"> </label>
-
-        </div>
-        <!--音量設定終了-->
+      <button type=“button” onclick="focusOn(3);" class="none" id="focus-3"> <img
+          src="assets/icons/dream_transparent.png" class="menu-icon"> </button>
+          
+      <button type=“button” onclick="focusOn(4);" id="focus-4"> <img src="assets/icons/bgm.png"
+          class="menu-icon"> </button>
+    </div>
 
 
-        <!--時報設定-->
-        <div id="announcement-interval-menu">
-         <button type=“button” onclick="changeFrequency(5);" class="cf colorable-font" id="5">5Min</button><!--
-      --><button type=“button” onclick="changeFrequency(10);" class="cf colorable-font" id="10">10Min</button><!--
-      --><button type=“button” onclick="changeFrequency(15);" class="cf colorable-font" id="15">15Min</button><!--
-      --><button type=“button” onclick="changeFrequency(30);" class="cf colorable-font" id="30">30Min</button><!--
-      --><button type=“button” onclick="changeFrequency(60);" class="cf colorable-font" id="60">60Min</button>
-        </div>
+    <div id="playlist-global">
+      <div id="frame-options">
+        <input type="checkbox" name="visible-player" id="visible-player" class="inv-checkbox" checked>
+        <label for="visible-player" id="visible-player-label" onclick="switchFrameFilter()"> <img src="img/eye.png"
+            id="visible"> </label>
 
+        <input type="checkbox" name="cookie-mode" id="cookie-mode" class="inv-checkbox">
+        <label for="cookie-mode" id="cookie-mode-label" onclick="switchFrameCookie()"> <img src="img/cookie.png"
+            id="cookie-img"> </label>
+
+        <button type="button" onclick="reloadPlaylist(nowPage)" id="reload-button"><img src="img/reload.png"
+            class="reload"></button>
       </div>
     </div>
   </div>
 
+  <main>
+
+    <div class="url tab" id="url-0">
+      <p id="time" class="time colorable-font"></p>
+      <div id="time-bar"></div>
+      <div id="time-bar2"></div>
+
+      <div id="openclose">
+        <button type=“button” onclick="switchMenu();" class="option-button" id="option-button"> <img
+            src="img/option2.png" alt="option" height="20px" width="20px" id="option-icon"> </button>
+
+        <div class="clock-menu" id="clock-menu">
+          <!--音量設定-->
+          <div id="volume-option-div">
+
+            <input type="range" id="volume-bar" class="volume-bar" name="volume-bar" min="0" max="100" value="30"
+              step="1" list="markers" />
+            <label for="volume-bar" id="volume-bar-label" class="colorable-font">Volume: 30%</label>
+
+            <datalist id="markers">
+              <option value="30"></option>
+            </datalist>
+
+            <input type="checkbox" id="mute" name="mute" class="inv-checkbox">
+            <label for="mute" id="mute-label"> <img src="img/unmuted.png" alt="Unmuted" height="20px" width="20px"
+                id="mute-icon"> </label>
+
+          </div>
+          <!--音量設定終了-->
 
 
+          <!--時報設定-->
+          <div id="announcement-interval-menu">
+            <button type=“button” onclick="changeFrequency(5);" class="cf colorable-font" id="5">5Min</button><!--
+      --><button type=“button” onclick="changeFrequency(10);" class="cf colorable-font" id="10">10Min</button><!--
+      --><button type=“button” onclick="changeFrequency(15);" class="cf colorable-font" id="15">15Min</button><!--
+      --><button type=“button” onclick="changeFrequency(30);" class="cf colorable-font" id="30">30Min</button><!--
+      --><button type=“button” onclick="changeFrequency(60);" class="cf colorable-font" id="60">60Min</button>
+          </div>
 
+        </div>
+      </div>
+    </div>
 
-  <div id="playlist-global">
-  <div id="frame-options">
-    <input type="checkbox" name="visible-player" id="visible-player" class="inv-checkbox" checked>
-    <label for="visible-player" id="visible-player-label" onclick="switchFrameFilter()"> <img src="img/eye.png" id="visible"> </label>
+    <div class="listDiv tab" id="url-1">
+      <div id="fc-1" class="frame-container">
+        <button type=“button” class="frame-cover prf"></button>
+        <button type=“button” class="frame-cover logo"></button>
+      </div>
+    </div>
 
-    <input type="checkbox" name="cookie-mode" id="cookie-mode" class="inv-checkbox">
-    <label for="cookie-mode" id="cookie-mode-label" onclick="switchFrameCookie()"> <img src="img/cookie.png" id="cookie-img"> </label>
+    <div class="listDiv tab" id="url-2">
+      <div id="fc-2" class="frame-container">
+        <button type=“button” class="frame-cover prf"></button>
+        <button type=“button” class="frame-cover logo"></button>
+      </div>
+    </div>
 
-    <button type="button" onclick="reloadPlaylist(nowPage)" id="reload-button"><img src="img/reload.png" class="reload"></button>
-  </div>
-  </div>
+    <div class="listDiv tab" id="url-3">
+      <div id="fc-3" class="frame-container">
+        <button type=“button” class="frame-cover prf"></button>
+        <button type=“button” class="frame-cover logo"></button>
+      </div>
+    </div>
 
-  <div class="listDiv" id="url-1">
-    <button type="button" onclick="loadPlaylist(1)" class="lp" id="loadPlaylistBtn-1">Load</button>
-    <button type=“button” class="frame-cover prf"></button>
-    <button type=“button” class="frame-cover logo"></button>
-  </div>
+    <div class="listDiv tab" id="url-4">
+      <div id="fc-4" class="frame-container">
+        <button type=“button” class="frame-cover prf"></button>
+        <button type=“button” class="frame-cover logo"></button>
+      </div>
+    </div>
 
-  <div class="listDiv" id="url-2">
-    <button type="button" onclick="loadPlaylist(2)" class="lp" id="loadPlaylistBtn-2">Load</button>
-    <button type=“button” class="frame-cover prf"></button>
-    <button type=“button” class="frame-cover logo"></button>
-  </div>
-
-  <div class="listDiv" id="url-3">
-    <button type="button" onclick="loadPlaylist(3)" class="lp" id="loadPlaylistBtn-3">Load</button>
-    <button type=“button” class="frame-cover prf"></button>
-    <button type=“button” class="frame-cover logo"></button>
-  </div>
-
-  <div class="listDiv" id="url-4">
-    <button type="button" onclick="loadPlaylist(4)" class="lp" id="loadPlaylistBtn-4">Load</button>
-    <button type=“button” class="frame-cover prf"></button>
-    <button type=“button” class="frame-cover logo"></button>
-  </div>
+  </main>
 
   <script src="main.js"></script>
   <script src="switchScreen.js"></script>
