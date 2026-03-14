@@ -30,7 +30,7 @@ function resetAFKTime() { //操作があると実行される関数
 
   showClock = setTimeout(() => {
     if(nowPage !== 0) sideClock.container.classList.add("shown");
-  }, 2000);
+  }, 5000);
 }
 
 
