@@ -7,13 +7,9 @@
 
   <title id="title">Bookmarks</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="clock.css">
 
   <link rel="icon" href="mg_icon.ico" type="image/x-icon" id="icon">
-
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
 </head>
 
 <body id="body">
@@ -22,17 +18,17 @@
       <button type=“button” onclick="focusOn(0);" class="tab-button-selected" id="focus-0"> <img
           src="assets/icons/timer_transparent.png" class="menu-icon"> </button>
 
-      <button type=“button” onclick="focusOn(1);" id="focus-1"> <img
-          src="assets/icons/asmr_transparent.png" class="menu-icon"> </button>
+      <button type=“button” onclick="focusOn(1);" id="focus-1"> <img src="assets/icons/asmr_transparent.png"
+          class="menu-icon"> </button>
 
-      <button type=“button” onclick="focusOn(2);" id="focus-2"> <img
-          src="assets/icons/ambience_transparent.png" class="menu-icon"> </button>
+      <button type=“button” onclick="focusOn(2);" id="focus-2"> <img src="assets/icons/ambience_transparent.png"
+          class="menu-icon"> </button>
 
       <button type=“button” onclick="focusOn(3);" class="none" id="focus-3"> <img
           src="assets/icons/dream_transparent.png" class="menu-icon"> </button>
-          
-      <button type=“button” onclick="focusOn(4);" id="focus-4"> <img src="assets/icons/bgm.png"
-          class="menu-icon"> </button>
+
+      <button type=“button” onclick="focusOn(4);" id="focus-4"> <img src="assets/icons/bgm.png" class="menu-icon">
+      </button>
     </div>
 
 
@@ -126,9 +122,16 @@
 
   </main>
 
+  <div id="clock-container">
+    <p id="clock-time"></p>
+    <p id="clock-date"></p>
+    <div id="clock-back"></div>
+  </div>
+
   <script src="main.js"></script>
   <script src="switchScreen.js"></script>
   <script src="loadLists.js"></script>
+  <script src="clock.js"></script>
 
 </body>
 

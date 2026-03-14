@@ -1,0 +1,40 @@
+/* #region clock */
+#clock-container {
+  position: fixed;
+  display: block;
+  top: 145px;
+  left: 20px;
+  height: max-content;
+  width: 100px;
+
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+
+  opacity: 0%;
+  pointer-events: none;
+
+  z-index: 2001;
+
+  transition: opacity ease-in-out 1s;
+}
+
+#clock-container.shown {
+  opacity: 100%;
+}
+
+/*時間と日付の間隔を狭める*/
+#clock-container p {
+  margin: 4px;
+  z-index: 2001;
+}
+
+#clock-time {
+  font-size: 16px;
+}
+
+#clock-date {
+  font-size: 10px;
+  width: auto;
+}
+
+/* #endregion */

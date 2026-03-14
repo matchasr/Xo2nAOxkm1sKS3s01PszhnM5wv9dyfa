@@ -315,6 +315,19 @@ function disableCover() {
 
 
 
+function startPIP() {
+  console.log("pip run");
+  const video = document.querySelector('video');
+
+  console.log(video);
+
+  if(!video) window.alert("video did not found.");
+
+  video.requestPictureInPicture();
+}
+
+
+
 //----------
 
 
